@@ -1,6 +1,6 @@
 from werkzeug.exceptions import HTTPException
 from app import app
-from api_nltk import Get_word_frequencies, Get_concordance_lines, Get_tokens, Get_tokens_upload, Get_collocate_list
+from api_nltk import Get_word_frequencies, Get_concordance_lines, Get_tokens, Get_tokens_upload, Get_collocate_list, Get_ngram_list
 import api_error_handler as err_handler
 
 
@@ -37,3 +37,8 @@ def Nltk_get_concordance_lines():
 @app.route('/nltk/collocates', methods=['POST'])
 def Nltk_get_collocates_list():
     return Get_collocate_list()
+
+
+@app.route('/nltk/ngrams', methods=['POST'])
+def Nltk_get_ngram_list():
+    return Get_ngram_list()

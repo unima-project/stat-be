@@ -29,10 +29,11 @@ export const options = {
             display: false,
         },
         title: {
-            display: true,
+            display: false,
             text: 'Word Frequency',
         },
     },
+    indexAxis: 'x',
 };
 
 
@@ -56,19 +57,15 @@ const LineChart = (props) => {
 
 
     return (
-        <Box
-            sx={{
-                height: 300,
-                overflow: "hidden",
-                overflowY: "scroll",
-                overflowX: "scroll",
-            }}
-        >
+        <>
+            <Box sx={{textAlign: "center"}}>
+                <h4>Word Frequency</h4>
+            </Box>
             <Line
                 data={data}
                 options={options}
             />
-        </Box>
+        </>
     );
 }
 export default LineChart;

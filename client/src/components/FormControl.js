@@ -7,6 +7,12 @@ const FormControl = (props) => {
     const [fileName, setFileName] = React.useState("")
     const [text, setText] = React.useState("");
 
+    const resetState = () => {
+        setFileName("");
+        setText("");
+        props.setKeyword("");
+    }
+
     const handleReveal = () => {
         props.setAlertMessage("")
 
@@ -18,7 +24,7 @@ const FormControl = (props) => {
                 props.setAlertMessage(`handle reveal: ${error}`)
             })
             .finally(() => {
-                setText("")
+                resetState();
             })
     }
     const handleTextChange = (event) => {
@@ -48,7 +54,7 @@ const FormControl = (props) => {
                 props.setAlertMessage(`handle upload: ${error}`)
             })
             .finally(() => {
-                setFileName("")
+                resetState();
             })
     };
 

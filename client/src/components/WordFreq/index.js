@@ -23,10 +23,22 @@ const WordFreq = (props) => {
 
     return(
         <>
-            <Grid xs={6} sx={{border: '1px solid lightGrey'}}>
+            <Grid xs={6} sx={{
+                border: '1px solid lightGrey'
+                , height: 550
+                , overflow: "hidden"
+                , overflowY: "scroll"
+                , overflowX: "scroll"
+            }}>
                 <WordCloudChart data={wordFrequencies}/>
             </Grid>
-            <Grid xs={6} sx={{border: '1px solid lightGrey'}}>
+            <Grid xs={6} sx={{
+                border: '1px solid lightGrey'
+                , height: 550
+                , overflow: "hidden"
+                , overflowY: "scroll"
+                , overflowX: "scroll"
+            }}>
                 <LineChart data={wordFrequencies}/>
             </Grid>
         </>

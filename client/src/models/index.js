@@ -39,10 +39,10 @@ export const GetTokenListUpload = async (formData) => {
     }
 }
 
-export const GetConcordanceList = async (tokens, keyword) => {
+export const GetConcordanceList = async (tokens, width) => {
     try {
         const {data} = await axios.post(baseUrl + '/nltk/concordances', {
-            keyword: keyword,
+            width: width,
             tokens: tokens
         })
 
@@ -56,6 +56,19 @@ export const GetWordFreqList = async (tokens) => {
     try {
         const {data} = await axios.post(baseUrl + '/nltk/word_frequencies', {
             tokens: tokens
+        })
+
+        return data
+    } catch (error) {
+        throw error.response.data.message
+    }
+};
+
+export const GetNgramList = async (tokens, size) => {
+    try {
+        const {data} = await axios.post(baseUrl + '/nltk/ngrams', {
+            tokens: tokens
+            , size: size
         })
 
         return data

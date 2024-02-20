@@ -4,11 +4,11 @@ import Grid from '@mui/system/Unstable_Grid';
 import Box from '@mui/system/Box';
 
 const Token = (props) => {
-    const [termList, setTermList] = React.useState([]);
+    const [wordList, setWordList] = React.useState([]);
 
     React.useEffect(() => {
-        setTermList(removeDuplicate(props.data));
-    }, [props.data])
+        setWordList(removeDuplicate(props.data));
+    }, [props.data, props.keyword])
 
     const removeDuplicate = (terms) => {
         const uniqueTerms = []
@@ -22,28 +22,23 @@ const Token = (props) => {
     }
 
     return (
-        <Box
-            sx={{
-                height: 400,
-                overflow: "hidden",
-                overflowY: "scroll",
-                overflowX: "scroll",
-            }}
-        >
+        <>
             <Grid>
                 {
-                    termList.map((term, index) => {
+                    wordList.map((word, index) => {
                         return <Chip
                             key={index}
                             sx={{m: 0.5}}
-                            label={term}
+                            label={word}
                             size="small"
-                            onClick={() => props.setKeyword(term)}
+                            variant={props.keyword === word ? "filled" : "outlined"}
+                            onClick={() => props.setupKeyword(word)}
+                            color="primary"
                         />
                     })
                 }
             </Grid>
-        </Box>
+        </>
     );
 }
 export default Token;
