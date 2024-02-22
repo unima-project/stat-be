@@ -1,6 +1,6 @@
 import React from 'react';
 import Grid from "@mui/system/Unstable_Grid";
-import WordFreq from "./WordFreq";
+import WordFreq from "./WordFreqs";
 import Token from "./Token";
 import Concordance from "./Concordance";
 import Collocate from "./Collocate";
@@ -11,7 +11,7 @@ export const Result = (props) => {
     return (
         <Box sx={{p: 2, m: 3, border: '1px dashed lightGrey', flexGrow: 1}}>
             <Grid spacing={2} container>
-                <WordFreq tokens={props.tokens} setAlertMessage={props.setAlertMessage}/>
+                <WordFreq tokens={props.tokens} setAlertMessage={props.setAlertMessage} setupKeyword={props.setupKeyword}/>
                 <Grid xs={6} sx={{
                     border: '1px solid lightGrey'
                     , height: 550

@@ -2,7 +2,7 @@ import React from 'react';
 import Grid from "@mui/system/Unstable_Grid";
 import WordCloudChart from "./WordCloudChart";
 import LineChart from "./LineChart";
-import {GetWordFreqList} from "../../models";
+import {GetWordFreqList} from "../../../models";
 
 const WordFreq = (props) => {
     const [wordFrequencies, setWordFrequencies] = React.useState([])
@@ -24,17 +24,14 @@ const WordFreq = (props) => {
     return(
         <>
             <Grid xs={6} sx={{
-                border: '1px solid lightGrey'
-                , height: 550
-                , overflow: "hidden"
-                , overflowY: "scroll"
-                , overflowX: "scroll"
+                border: '0px solid lightGrey'
+                , height: 350
             }}>
-                <WordCloudChart data={wordFrequencies}/>
+                <WordCloudChart data={wordFrequencies} setupKeyword={props.setupKeyword}/>
             </Grid>
             <Grid xs={6} sx={{
                 border: '1px solid lightGrey'
-                , height: 550
+                , height: 450
                 , overflow: "hidden"
                 , overflowY: "scroll"
                 , overflowX: "scroll"

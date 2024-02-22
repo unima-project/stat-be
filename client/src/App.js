@@ -1,15 +1,8 @@
 import React from 'react';
 import {Container} from '@mui/material';
-import Grid from '@mui/system/Unstable_Grid';
 import Box from '@mui/system/Box';
-import Token from "./components/Token";
-import Concordance from "./components/Concordance";
-import Collocate from "./components/Collocate";
-import FormControl from "./components/FormControl";
-import WordFreq from "./components/WordFreq";
-import AlertNotification from "./components/alert";
-import Ngram from "./components/Ngram";
-import {Result} from "./components";
+import {Result} from "./components/Results";
+import MainController from "./components/MainControllers";
 
 
 function App() {
@@ -30,10 +23,13 @@ function App() {
             <Box sx={{p: 2, m: 3, border: '1px dashed lightGrey', textAlign: 'center'}}>
                 <h1>S.T.A.T</h1> Simple Text Analytic Tool
             </Box>
-            <Box sx={{p: 3, m: 3, border: '1px dashed lightGrey'}}>
-                <AlertNotification alertMessage={alertMessage} setAlertMessage={setAlertMessage} />
-                <FormControl setTokens={setTokens} setAlertMessage={setAlertMessage} setKeyword={setKeyword}/>
-            </Box>
+            <MainController
+                tokens={tokens}
+                setTokens={setTokens}
+                alertMessage={alertMessage}
+                setAlertMessage={setAlertMessage}
+                setKeyword={setKeyword}
+            />
             {
                 tokens.length > 0 && alertMessage === "" ?
                     <Result

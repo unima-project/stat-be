@@ -1,6 +1,6 @@
 import React from 'react';
 import {DataGrid} from "@mui/x-data-grid";
-import {GetConcordanceList} from "../models";
+import {GetConcordanceList} from "../../models";
 import Box from '@mui/system/Box';
 import {Stack} from "@mui/material";
 import FormControl from "@mui/material/FormControl";

@@ -1,5 +1,5 @@
 import React from 'react';
-import {GetNgramList} from "../models";
+import {GetNgramList} from "../../models";
 import {DataGrid} from '@mui/x-data-grid';
 import Box from '@mui/system/Box'
 import InputLabel from '@mui/material/InputLabel';

@@ -1,5 +1,5 @@
 import React from 'react';
-import {GetCollocationList} from "../models";
+import {GetCollocationList} from "../../models";
 import {DataGrid} from '@mui/x-data-grid';
 import Box from '@mui/system/Box'
 import FormControl from "@mui/material/FormControl";

@@ -1,9 +1,10 @@
 import React from 'react';
 import Box from "@mui/system/Box";
-import {Button, Stack} from "@mui/material";
-import {GetTokenList, GetTokenListUpload} from "../models";
+import {GetTokenList, GetTokenListUpload} from "../../models";
+import {AlertNotification} from "./alert";
+import {InputController} from "./InputController";
 
-const FormControl = (props) => {
+const MainController = (props) => {
     const [fileName, setFileName] = React.useState("")
     const [text, setText] = React.useState("");
 
@@ -59,36 +60,22 @@ const FormControl = (props) => {
     };
 
     return (
-        <>
-            <Box sx={{marginBottom: 1, textAlign: "center"}}>
-                    <textarea
-                        placeholder="text"
-                        onChange={handleTextChange}
-                        value={text}
-                        rows={10}
-                        cols={100}
-                    />
-            </Box>
-            <Box>
-                <Stack direction="row" spacing={1}>
-                    <Button size="small" variant="contained" onClick={handleReveal}>Reveal</Button>
-                    <Button size="small" variant="outlined" component="label">
-                        Upload
-                        {
-                            fileName === "" ?
-                                <input
-                                    type="file"
-                                    onChange={handleUpload}
-                                    accept="text/plain"
-                                    hidden
-                                /> : <></>
-                        }
-                    </Button>
-                    <Button size="small" color="error" variant="outlined" onClick={() => props.setTokens("")}>Reset</Button>
-                </Stack>
-            </Box>
-        </>
+        <Box sx={{p: 3, m: 3, border: '1px dashed lightGrey'}}>
+            <AlertNotification
+                alertMessage={props.alertMessage}
+                setAlertMessage={props.setAlertMessage}
+            />
+            <InputController
+                setTokens={props.setTokens}
+                setAlertMessage={props.setAlertMessage}
+                handleReveal={handleReveal}
+                handleUpload={handleUpload}
+                handleTextChange={handleTextChange}
+                text={text}
+                fileName={fileName}
+            />
+        </Box>
     )
 }
 
-export default FormControl;
+export default MainController;

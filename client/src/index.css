@@ -1,3 +1,8 @@
+body {
+  font-family: Arial, serif;
+  color: darkslategrey;
+}
+
 textarea {
   font-size:12px;
   width:98%;
