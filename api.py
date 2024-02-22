@@ -14,6 +14,11 @@ def err_page_not_found(e):
     return err_handler.page_not_found(e)
 
 
+@app.route("/", methods=["GET"])
+def Home():
+    return "Hello from STAT (Simple Text Analytic Tool)"
+
+
 @app.route("/nltk/tokens", methods=["POST"])
 def Nltk_get_tokens():
     return Get_tokens()
