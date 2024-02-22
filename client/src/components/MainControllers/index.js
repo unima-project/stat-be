@@ -12,10 +12,12 @@ const MainController = (props) => {
         setFileName("");
         setText("");
         props.setKeyword("");
+        props.setLoading(false);
     }
 
     const handleReveal = () => {
-        props.setAlertMessage("")
+        props.setAlertMessage("");
+        props.setLoading(true);
 
         GetTokenList(text)
             .then(data => {
@@ -34,6 +36,7 @@ const MainController = (props) => {
 
     const handleUpload = (event) => {
         props.setAlertMessage("")
+        props.setLoading(true);
 
         if (event.target.files.length <= 0) {
             return
