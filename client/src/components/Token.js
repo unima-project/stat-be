@@ -1,14 +1,13 @@
 import React from 'react';
 import Chip from '@mui/material/Chip';
 import Grid from '@mui/system/Unstable_Grid';
-import Box from '@mui/system/Box';
 
 const Token = (props) => {
     const [wordList, setWordList] = React.useState([]);
 
     React.useEffect(() => {
-        setWordList(removeDuplicate(props.data));
-    }, [props.data, props.keyword])
+        setWordList(removeDuplicate(props.tokens));
+    }, [props.tokens, props.keyword])
 
     const removeDuplicate = (terms) => {
         const uniqueTerms = []

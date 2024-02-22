@@ -72,18 +72,19 @@ const FormControl = (props) => {
             <Box>
                 <Stack direction="row" spacing={1}>
                     <Button size="small" variant="contained" onClick={handleReveal}>Reveal</Button>
-                        <Button size="small" variant="outlined" component="label">
-                            Upload
-                            {
-                                fileName === "" ?
-                                    <input
-                                        type="file"
-                                        onChange={handleUpload}
-                                        accept="text/plain"
-                                        hidden
-                                    /> : <></>
-                            }
-                        </Button>
+                    <Button size="small" variant="outlined" component="label">
+                        Upload
+                        {
+                            fileName === "" ?
+                                <input
+                                    type="file"
+                                    onChange={handleUpload}
+                                    accept="text/plain"
+                                    hidden
+                                /> : <></>
+                        }
+                    </Button>
+                    <Button size="small" color="error" variant="outlined" onClick={() => props.setTokens("")}>Reset</Button>
                 </Stack>
             </Box>
         </>

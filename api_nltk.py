@@ -33,9 +33,15 @@ def Get_tokens_upload():
         , data=None
     )
 
+    file_name = ""
+    f = None
+    text = None
+
     try:
         f = request.files['text']
-        err = File_validation(f.filename)
+        file_name = f.filename
+
+        err = File_validation(file_name)
         if err:
             response['status'] = ERROR
             response['message'] = err
@@ -46,17 +52,22 @@ def Get_tokens_upload():
         text = open(f.filename, "r")
         joined_text = "".join(text.readlines())
         tokens = Tokenizing(joined_text)
-        text.close()
-        remove(f.filename)
 
         response['message'] = f'{f.filename} successfully uploaded'
         response['data'] = tokens
-    except KeyError as err:
+    except:
+        err = "error uploading file"
         response['status'] = ERROR
-        response['message'] = f'{err} required'
-        return jsonify(response), 400
+        response['message'] = err
 
-    return jsonify(response), 200
+    remove(file_name)
+    f.close()
+    text.close()
+
+    if err:
+        return jsonify(response), 400
+    else:
+        return jsonify(response), 200
 
 
 def Get_word_frequencies():
