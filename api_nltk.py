@@ -1,4 +1,6 @@
-from os import remove
+import os
+import stat
+from os import remove, chmod
 from nltk import tokenize, FreqDist, ngrams
 from nltk.text import ConcordanceIndex
 from nltk.collocations import BigramCollocationFinder
@@ -35,7 +37,6 @@ def Get_tokens_upload():
 
     file_name = ""
     f = None
-    text = None
 
     try:
         f = request.files['text']
@@ -60,9 +61,11 @@ def Get_tokens_upload():
         response['status'] = ERROR
         response['message'] = err
 
-    remove(file_name)
-    f.close()
-    text.close()
+    try:
+        f.close()
+        remove(file_name)
+    except:
+        print(f'failed to close/ remove file {file_name}')
 
     if err:
         return jsonify(response), 400
