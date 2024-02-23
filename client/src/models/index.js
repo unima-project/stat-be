@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const baseUrl = "http://localhost:5000";
-
+const baseUrl = "https://stat-app-dot-stat-415110.et.r.appspot.com";
 
 export const GetCollocationList = async (tokens) => {
     try {
