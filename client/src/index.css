@@ -1,11 +1,21 @@
 body {
-  font-family: Arial, serif;
-  color: darkslategrey;
+    font-family: Arial, serif;
+    color: #1f6dc1;
 }
 
 textarea {
-  font-size:12px;
-  width:98%;
-  padding: 1%;
-  resize: none;
+    font-size: 12px;
+    width: 98%;
+    padding: 1%;
+    resize: none;
+    border: #1f6dc1 .1rem solid;
+    border-radius: 5px;
+}
+
+a {
+    text-decoration: none;
+}
+
+img {
+    border: black 5px solid;
 }
