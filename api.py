@@ -18,6 +18,10 @@ def err_page_not_found(e):
 def Home():
     return "Hello from STAT (Simple Text Analytic Tool)"
 
+@app.route("/tools", methods=["GET"])
+def Tools():
+    return "Hello from STAT (Simple Text Analytic Tool)"
+
 
 @app.route("/nltk/tokens", methods=["POST"])
 def Nltk_get_tokens():
