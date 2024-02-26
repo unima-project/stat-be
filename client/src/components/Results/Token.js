@@ -22,7 +22,7 @@ const Token = (props) => {
 
     return (
         <>
-            <Grid>
+            <Grid sx={{textAlign: 'justify'}}>
                 {
                     wordList.map((word, index) => {
                         return <Chip
