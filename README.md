@@ -21,6 +21,6 @@
 > npm i --force 
 > npm start
 ```
-![home](./homr.png "home")
+![home](./home.png "home")
 ![tool](./tool.png "tool")
 
