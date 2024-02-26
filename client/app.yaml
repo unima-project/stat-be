@@ -1,4 +1,4 @@
-service: stat-se1-app-client
+service: stat-app-client
 runtime: python312
 
 handlers:
