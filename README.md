@@ -21,6 +21,6 @@
 > npm i --force 
 > npm start
 ```
-
-![view](./view.png "view")
+![home](./homr.png "home")
+![tool](./tool.png "tool")
 
