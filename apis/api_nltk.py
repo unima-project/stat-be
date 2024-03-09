@@ -1,26 +1,12 @@
-from werkzeug.exceptions import HTTPException
 from app import app
-from api_nltk import Get_word_frequencies, Get_concordance_lines, Get_tokens, Get_tokens_upload, Get_collocate_list, Get_ngram_list
-import api_error_handler as err_handler
-
-
-@app.errorhandler(HTTPException)
-def err_handle_exception(e):
-    return err_handler.handle_exception(e)
-
-
-@app.errorhandler(404)
-def err_page_not_found(e):
-    return err_handler.page_not_found(e)
-
-
-@app.route("/", methods=["GET"])
-def Home():
-    return "Hello from STAT (Simple Text Analytic Tool)"
-
-@app.route("/tools", methods=["GET"])
-def Tools():
-    return "Hello from STAT (Simple Text Analytic Tool)"
+from apis.controllers.controller_nltk import (
+    Get_word_frequencies
+    , Get_concordance_lines
+    , Get_tokens
+    , Get_tokens_upload
+    , Get_collocate_list
+    , Get_ngram_list
+)
 
 
 @app.route("/nltk/tokens", methods=["POST"])

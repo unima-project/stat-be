@@ -21,6 +21,14 @@
 > npm i --force 
 > npm start
 ```
+
+### setup MySQL v.8.3.0 Database
+```commandline
+> mysql -uroot -p
+> CREATE DATABASE unima;
+> GRANT ALL PRIVILEGES ON unima.* TO 'root'@'localhost';
+```
+
 ![home](./home.png "home")
 ![tool](./tool.png "tool")
 

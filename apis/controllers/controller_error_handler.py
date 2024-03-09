@@ -1,7 +1,7 @@
 import logging
 
 from flask import jsonify
-from api_common import Response, ERROR
+from apis.controllers.controller_common import Response, ERROR
 
 
 def handle_exception(e):

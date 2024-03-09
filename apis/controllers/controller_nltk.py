@@ -1,10 +1,8 @@
-import os
-import stat
-from os import remove, chmod
+from os import remove
 from nltk import tokenize, FreqDist, ngrams
 from nltk.text import ConcordanceIndex
 from nltk.collocations import BigramCollocationFinder
-from api_common import Response, ERROR, SUCCESS
+from apis.controllers.controller_common import Response, ERROR, SUCCESS
 from flask import jsonify, request
 from collections import Counter
 
