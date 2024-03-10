@@ -84,13 +84,13 @@ def View_all_user():
                 , "status": user.status
             })
     except sqlalchemy.exc.OperationalError as err:
-        return f'{err_msg} {err}', None
+        return None, f'{err_msg} {err}'
     except sqlalchemy.exc.IntegrityError as err:
-        return f'{err_msg} {err}', None
+        return None,f'{err_msg} {err}'
     except:
-        return 'unknown error view all user'
+        return None, 'unknown error view all user'
 
-    return None, users
+    return users, None
 
 
 def Update_current_user(current_user):
@@ -125,17 +125,23 @@ def Delete_current_user(current_user):
     return None
 
 
-def Find_by_email(email):
-    curr_user = Users.query.filter_by(email=email).first()
-    return curr_user
+def Find_user_by_custom_filter(**kwargs):
+    try:
+        curr_user = Users.query.filter_by(**kwargs).first()
+        if curr_user is None:
+            return None, "user not found"
+
+        return curr_user, None
+    except:
+        return None, "error find user by custom filter"
 
 
 def Find_user_by_id(user_id):
     try:
         curr_user = Users.query.get(user_id)
         if curr_user is None:
-            return "user not found", None
+            return None, "user not found"
 
-        return None, curr_user
+        return curr_user, None
     except:
-        return "error find user by id", None
+        return None, "error find user by id"

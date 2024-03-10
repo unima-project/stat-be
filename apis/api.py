@@ -23,5 +23,6 @@ def Tools():
     return "Welcome tools from STAT (Simple Text Analytic Tool)"
 
 
+import apis.api_authentication
 import apis.api_user
 import apis.api_nltk
