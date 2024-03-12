@@ -1,4 +1,5 @@
 import logging
+import os
 
 from flask import request, jsonify, make_response
 from models.model_user import Find_user_by_custom_filter, USER_ACTIVE
@@ -57,7 +58,13 @@ def Login():
             }
 
             resp = make_response(jsonify(success_response))
-            resp.set_cookie(key="token", value=token, max_age=timedelta(hours=1), secure=True)
+            resp.set_cookie(
+                key="token"
+                , value=token
+                , max_age=timedelta(hours=1)
+                , secure=True
+                , domain=os.getenv("APPLICATION_COOKIE_DOMAIN", "localhost")
+            )
 
             return resp, 200
     except KeyError as err:
@@ -70,7 +77,7 @@ def Login():
         return jsonify(error_response), 401
 
 
-def Logout():
+def Logout(user_id):
     success_response = Response(
         status=SUCCESS
         , message="user successfully logout"

@@ -61,9 +61,13 @@ def Token_admin_authentication(func):
 
 
 def Token_validation(req):
-    jwt_token = req.cookies.get("token")
-    if jwt_token == "":
-        return 0, "error token validation: token required"
+    bearer_token = req.headers.get("Authorization")
+    if bearer_token is None:
+        return 0, "error token validation: bearer token required"
+
+    jwt_token = bearer_token.split(" ")[1]
+    if jwt_token == "" or jwt_token is None:
+        return 0, "error token validation: jwt token required"
 
     payload, err = Decode_jwt_token(jwt_token)
     if err:

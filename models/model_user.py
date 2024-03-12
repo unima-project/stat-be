@@ -125,9 +125,9 @@ def Delete_current_user(current_user):
     return None
 
 
-def Find_user_by_custom_filter(**kwargs):
+def Find_user_by_custom_filter(**filters):
     try:
-        curr_user = Users.query.filter_by(**kwargs).first()
+        curr_user = Users.query.filter_by(**filters).first()
         if curr_user is None:
             return None, "user not found"
 

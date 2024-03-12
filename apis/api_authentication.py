@@ -3,12 +3,12 @@ from app import app
 from middlewares.middleware_authentication import Token_authentication
 
 
-@app.route("/login", methods=["POST"])
+@app.route("/auth/login", methods=["POST"])
 def Auth_login():
     return Login()
 
 
-@app.route("/logout", methods=["GET"])
+@app.route("/auth/logout", methods=["GET"])
 @Token_authentication
-def Auth_logout():
-    return Logout()
+def Auth_logout(user_id):
+    return Logout(user_id)

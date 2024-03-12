@@ -60,8 +60,6 @@ def Create_new_user():
         logging.error(err)
         error_response['message'] = err
         return jsonify(error_response), 400
-    except:
-        return jsonify(error_response), 400
 
 
 def Get_all_user_list():
@@ -147,8 +145,6 @@ def Update_user():
         logging.error(err)
         error_response['message'] = err
         return jsonify(error_response), 400
-    except:
-        return jsonify(error_response), 400
 
 
 def Delete_user():
@@ -174,12 +170,13 @@ def Delete_user():
         err = Delete_current_user(current_user)
         if err:
             logging.error(err)
+            logging.error(err)
             error_response['message'] = err
             return jsonify(error_response), 400
 
         return success_response, 200
     except KeyError as err:
-        err_msg = f'error update user: {err} required'
+        err_msg = f'error delete user: {err} required'
         logging.error(err_msg)
         error_response['message'] = err_msg
         return jsonify(error_response), 400
@@ -190,8 +187,6 @@ def Delete_user():
     except AttributeError as err:
         logging.error(err)
         error_response['message'] = err
-        return jsonify(error_response), 400
-    except:
         return jsonify(error_response), 400
 
 
@@ -254,8 +249,6 @@ def Update_user_password(user_id):
         logging.error(err)
         error_response['message'] = err
         return jsonify(error_response), 400
-    except:
-        return jsonify(error_response), 400
 
 
 def Reset_user_password():
@@ -308,8 +301,6 @@ def Reset_user_password():
     except AttributeError as err:
         logging.error(err)
         error_response['message'] = err
-        return jsonify(error_response), 400
-    except:
         return jsonify(error_response), 400
 
 

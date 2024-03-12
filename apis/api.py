@@ -26,3 +26,4 @@ def Tools():
 import apis.api_authentication
 import apis.api_user
 import apis.api_nltk
+import apis.api_corpus
