@@ -11,7 +11,7 @@ export const Result = (props) => {
     return (
         <Box sx={{p: 2, m: 3, border: '1px dashed lightGrey', flexGrow: 1}}>
             <Grid spacing={2} container>
-                <WordFreq tokens={props.tokens} setAlertMessage={props.setAlertMessage} setupKeyword={props.setupKeyword}/>
+                <WordFreq tokens={props.tokens} setAlertStatus={props.setAlertStatus} setupKeyword={props.setupKeyword}/>
                 <Grid xs={6} sx={{
                     border: '1px solid lightGrey'
                     , height: 550
@@ -28,7 +28,7 @@ export const Result = (props) => {
                     , overflowY: "scroll"
                     , overflowX: "scroll"
                 }}>
-                    <Concordance tokens={props.tokens} keyword={props.keyword} setAlertMessage={props.setAlertMessage}/>
+                    <Concordance tokens={props.tokens} keyword={props.keyword} setAlertStatus={props.setAlertStatus}/>
                 </Grid>
                 <Grid xs={6} sx={{
                     border: '1px solid lightGrey'
@@ -37,7 +37,7 @@ export const Result = (props) => {
                     , overflowY: "scroll"
                     , overflowX: "scroll"
                 }}>
-                    <Collocate tokens={props.tokens} setAlertMessage={props.setAlertMessage} keyword={props.keyword}/>
+                    <Collocate tokens={props.tokens} setAlertStatus={props.setAlertStatus} keyword={props.keyword}/>
                 </Grid>
                 <Grid xs={6} sx={{
                     border: '1px solid lightGrey'
@@ -46,7 +46,7 @@ export const Result = (props) => {
                     , overflowY: "scroll"
                     , overflowX: "scroll"
                 }}>
-                    <Ngram tokens={props.tokens} setAlertMessage={props.setAlertMessage} keyword={props.keyword}/>
+                    <Ngram tokens={props.tokens} setAlertStatus={props.setAlertStatus} keyword={props.keyword}/>
                 </Grid>
             </Grid>
         </Box>

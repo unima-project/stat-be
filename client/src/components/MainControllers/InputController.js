@@ -1,9 +1,11 @@
 import React from 'react';
 import Box from "@mui/system/Box";
 import {Button, Stack} from "@mui/material";
+import SaveIcon from '@mui/icons-material/Save';
+import {alertSeverity} from "../Alert";
 
 export const InputController = (props) => {
-    return(<>
+    return (<>
         <Box sx={{marginBottom: 1, textAlign: "center"}}>
                     <textarea
                         placeholder="text"
@@ -28,8 +30,32 @@ export const InputController = (props) => {
                             /> : <></>
                     }
                 </Button>
-                <Button size="small" color="error" variant="outlined" onClick={() => props.setTokens("")}>Reset</Button>
+                <Button
+                    size="small"
+                    color="error"
+                    variant="outlined"
+                    onClick={() => {
+                        props.errorState();
+                        props.resetState();
+                        props.setAlertStatus({
+                            severity: alertSeverity.INFO
+                            , message: ""
+                        });
+                        props.setSaveStatus(false);
+                    }}
+                >Reset</Button>
+                {
+                    props.cookie.token && props.saveStatus ?
+                        <Button
+                            size="small"
+                            color="secondary"
+                            variant="contained"
+                            onClick={props.saveCorpus}
+                            startIcon={<SaveIcon/>}
+                        >Save</Button>
+                        : <></>
+                }
             </Stack>
         </Box>
-        </>)
+    </>)
 }

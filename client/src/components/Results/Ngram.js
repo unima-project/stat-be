@@ -8,6 +8,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import {Stack} from "@mui/material";
+import {alertSeverity} from "../Alert";
 
 const columns = [
     {field: 'id', headerName: 'ID', type: 'number', width: 10},
@@ -63,7 +64,10 @@ const Ngram = (props) => {
                 setupNgramList(data.data)
             })
             .catch(error => {
-                props.setAlertMessage(`setup ngram list: ${error}`)
+                props.setAlertStatus({
+                    severity: alertSeverity.ERROR
+                    , message: `setup ngram list: ${error}`
+                })
             })
     };
 

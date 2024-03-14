@@ -1,7 +1,8 @@
 import axios from "axios";
 
 // const baseUrl = "https://stat-app-dot-stat-415110.et.r.appspot.com";
-const baseUrl = "http://localhost:5000";
+export const baseUrl = "http://localhost:5000";
+
 
 export const GetCollocationList = async (tokens) => {
     try {
@@ -11,7 +12,7 @@ export const GetCollocationList = async (tokens) => {
 
         return data
     } catch (error) {
-        throw error.response.data.message
+        throw error.response.data.message;
     }
 };
 
@@ -23,7 +24,7 @@ export const GetTokenList = async (text) => {
 
         return data
     } catch (error) {
-        throw error.response.data.message
+        throw error.response.data.message;
     }
 }
 
@@ -35,7 +36,7 @@ export const GetTokenListUpload = async (formData) => {
 
         return data
     } catch (error) {
-        throw error.response.data.message
+        throw error.response.data.message;
     }
 }
 
@@ -48,7 +49,7 @@ export const GetConcordanceList = async (tokens, width) => {
 
         return data
     } catch (error) {
-        throw error.response.data.message
+        throw error.response.data.message;
     }
 };
 
@@ -60,7 +61,7 @@ export const GetWordFreqList = async (tokens) => {
 
         return data
     } catch (error) {
-        throw error.response.data.message
+        throw error.response.data.message;
     }
 };
 
@@ -73,6 +74,6 @@ export const GetNgramList = async (tokens, size) => {
 
         return data
     } catch (error) {
-        throw error.response.data.message
+        throw error.response.data.message;
     }
 };

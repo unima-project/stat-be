@@ -5,11 +5,15 @@ import CircularProgress from "@mui/material-next/CircularProgress";
 import MainController from "./MainControllers";
 import {Result} from "./Results";
 import Typography from "@mui/material/Typography";
+import {alertSeverity} from "./Alert";
+import {useParams} from 'react-router-dom';
 
-
-export const Tool = () => {
+export const Tool = (props) => {
+    const {corpusId} = useParams();
     const [tokens, setTokens] = React.useState([]);
-    const [alertMessage, setAlertMessage] = React.useState("");
+    const [alertStatus, setAlertStatus] = React.useState({
+        message: "", severity: alertSeverity.INFO
+    });
     const [keyword, setKeyword] = React.useState("");
     const [loading, setLoading] = React.useState(false);
 
@@ -41,19 +45,20 @@ export const Tool = () => {
                     Simple Text Analysis Tool
                 </Typography>
                 <MainController
+                    corpusId ={corpusId}
                     tokens={tokens}
                     setTokens={setTokens}
-                    alertMessage={alertMessage}
-                    setAlertMessage={setAlertMessage}
+                    alertStatus={alertStatus}
+                    setAlertStatus={setAlertStatus}
                     setKeyword={setKeyword}
                     setLoading={setLoading}
                 />
                 {
-                    tokens.length > 0 && alertMessage === "" ?
+                    tokens.length > 0 ?
                         <Result
                             tokens={tokens}
                             setupKeyword={setupKeyword}
-                            setAlertMessage={setAlertMessage}
+                            setAlertStatus={setAlertStatus}
                             keyword={keyword}
                         /> : <></>
                 }

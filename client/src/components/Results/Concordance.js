@@ -8,6 +8,7 @@ import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import {alertSeverity} from "../Alert";
 
 const columns = [
     {field: 'id', headerName: 'ID', type: 'number', width: 10, align: "right"},
@@ -33,7 +34,10 @@ const Concordance = (props) => {
                 setupConcordanceList(data.data)
             })
             .catch(error => {
-                props.setAlertMessage(`setup concordance list: ${error}`)
+                props.setAlertStatus({
+                    severity: alertSeverity.ERROR
+                    , message: `setup concordance list: ${error}`
+                })
             })
     };
 
