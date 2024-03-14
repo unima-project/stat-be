@@ -25,10 +25,28 @@
 ### setup MySQL v.8.3.0 Database
 ```commandline
 > mysql -uroot -p
-> CREATE DATABASE unima;
-> GRANT ALL PRIVILEGES ON unima.* TO 'root'@'localhost';
+> CREATE DATABASE stat;
+> GRANT ALL PRIVILEGES ON stat.* TO 'root'@'localhost';
 ```
 
 ![home](./home.png "home")
 ![tool](./tool.png "tool")
+
+
+### create env file
+- create file with name `.env`
+- add these env items as follows (example for local configuration)
+, replace `DB_PASS` with your own database's password 
+, and `SECRET_KEY` with your own secret key :
+```text
+PORT=5000
+SECRET_KEY=rahasia
+
+DB_USER=root
+DB_PASS=password
+DB_HOST=localhost
+DB_NAME=stat
+
+APPLICATION_COOKIE_DOMAIN=localhost
+```
 
