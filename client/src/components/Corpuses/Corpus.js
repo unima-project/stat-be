@@ -7,22 +7,17 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import Box from '@mui/material/Box';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import DownloadIcon from '@mui/icons-material/Download';
 import {Button, Stack} from "@mui/material";
-import {useNavigate} from "react-router"
-import {Link} from "react-router-dom";
 
 export const CorpusList = (props) => {
-    const navigate = useNavigate();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [rows, setRows] = React.useState([]);
 
     const columns = [
         {id: 'id', label: 'Id', minWidth: 10},
-        {id: 'corpus_id', label: 'Corpus Id', minWidth: 10},
         {id: 'text', label: 'Text', minWidth: 50},
         {id: 'created_at', label: 'Created At', minWidth: 10},
         {id: 'action', label: '', minWidth: 10},
@@ -37,7 +32,6 @@ export const CorpusList = (props) => {
         setRows(props.corpusList.map((corpus, index) => {
             return {
                 id: index + 1
-                , corpus_id: corpus.id
                 , text: corpus.corpus
                 , created_at: corpus.created_at
                 , action: <Stack direction="row" spacing={2}>
@@ -47,19 +41,19 @@ export const CorpusList = (props) => {
                         component="label"
                         color="error"
                         onClick={() => props.deleteCurrentCorpus(corpus.id)}
-                    >
-                        <DeleteForeverIcon/>
+                    ><DeleteForeverIcon/>
                     </Button>
-                    <Link to={"/tools/" + corpus.id}>
-                        <Button
-                            size="small"
-                            variant="outlined"
-                            component="label"
-                            color="primary"
-                        >
-                            <DownloadIcon/>
-                        </Button>
-                    </Link>
+                    <Button
+                        size="small"
+                        variant="outlined"
+                        component="label"
+                        color="primary"
+                        onClick={() => {
+                            props.loadCurrentCorpus(corpus.id);
+                            props.handleModalClose();
+                        }}
+                    ><DownloadIcon/>
+                    </Button>
                 </Stack>
             }
         }));

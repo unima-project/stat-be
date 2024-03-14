@@ -7,5 +7,6 @@ export const SetupCookies = () => {
         , cookieUserName: cookie.name
         , setCookie: setCookie
         , removeCookie: removeCookie
+        , cookie: cookie
     }
 }

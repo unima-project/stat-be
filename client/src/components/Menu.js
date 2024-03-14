@@ -38,19 +38,11 @@ export const MainMenu = () => {
             })
     }
 
-    const handleCorpus = () => {
-        navigate("/corpuses")
-    }
-
     const handleProfile = () => {
         navigate("/users/profile")
     }
 
     const settings = [
-        {
-            key: "Corpus"
-            , func: handleCorpus
-        },
         {
             key: "Profile"
             , func: handleProfile

@@ -1,21 +1,21 @@
 import React from 'react';
 import {CorpusList} from "./Corpus";
 import Box from '@mui/material/Box';
-import {DeleteCorpus, GetCorpusList, LoadCorpus} from "../../models/Corpus";
+import {DeleteCorpus, GetCorpusList} from "../../models/Corpus";
 import {useNavigate} from "react-router-dom";
 import {AlertNotification, alertSeverity} from "../Alert";
 import {SetupCookies} from "../Helpers/cookie";
 
-export const Corpus = () => {
+export const Corpus = (props) => {
     const navigate = useNavigate();
     const [corpusList, setCorpusList] = React.useState([]);
-    const {cookieUserToken} = SetupCookies();
+    const {cookieUserToken, cookie} = SetupCookies();
     const [alertStatus, setAlertStatus] = React.useState({
         message: "", severity: alertSeverity.INFO
     });
 
     React.useEffect(() => {
-        if (cookieUserToken) navigate("/");
+        if (!cookieUserToken) navigate("/");
         GetCorpus();
     }, [cookieUserToken])
 
@@ -49,22 +49,13 @@ export const Corpus = () => {
             })
     }
 
-    const LoadCurrentCorpus = (corpus_id) => {
-        LoadCorpus(corpus_id, cookie.token)
-            .then((data) => {
-
-            })
-            .catch(error => {
-                setAlertStatus({
-                    severity: alertSeverity.ERROR
-                    , message: `${error}`
-                })
-            })
-    }
-
-    return (<Box sx={{marginTop: 15}}>
-        <h2>Corpus List</h2>
+    return (<Box>
         <AlertNotification alertStatus={alertStatus} setAlertStatus={setAlertStatus}/>
-        <CorpusList corpusList={corpusList} deleteCurrentCorpus={DeleteCurrentCorpus}/>
+        <CorpusList
+            corpusList={corpusList}
+            deleteCurrentCorpus={DeleteCurrentCorpus}
+            loadCurrentCorpus={props.loadCurrentCorpus}
+            handleModalClose={props.handleModalClose}
+        />
     </Box>);
 }

@@ -3,6 +3,10 @@ import Box from "@mui/system/Box";
 import {Button, Stack} from "@mui/material";
 import SaveIcon from '@mui/icons-material/Save';
 import {alertSeverity} from "../Alert";
+import {ModalCorpus} from "./ModalCorpus";
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 
 export const InputController = (props) => {
     return (<>
@@ -17,8 +21,13 @@ export const InputController = (props) => {
         </Box>
         <Box>
             <Stack direction="row" spacing={1}>
-                <Button size="small" variant="contained" onClick={props.handleReveal}>Reveal</Button>
-                <Button size="small" variant="outlined" component="label">
+                <Button
+                    size="small"
+                    variant="contained"
+                    onClick={props.handleReveal}
+                    startIcon={<VisibilityIcon/>}
+                >Reveal</Button>
+                <Button size="small" variant="outlined" component="label" startIcon={<CloudUploadIcon/>}>
                     Upload
                     {
                         props.fileName === "" ?
@@ -43,16 +52,24 @@ export const InputController = (props) => {
                         });
                         props.setSaveStatus(false);
                     }}
+                    startIcon={<RestartAltIcon/>}
                 >Reset</Button>
                 {
-                    props.cookie.token && props.saveStatus ?
-                        <Button
-                            size="small"
-                            color="secondary"
-                            variant="contained"
-                            onClick={props.saveCorpus}
-                            startIcon={<SaveIcon/>}
-                        >Save</Button>
+                    props.cookie.token ?
+                        <>
+                            <ModalCorpus loadCurrentCorpus={props.loadCurrentCorpus}/>
+                            {
+                            props.saveStatus && props.text !== "" ?
+                                <Button
+                                    size="small"
+                                    color="secondary"
+                                    variant="contained"
+                                    onClick={props.saveCorpus}
+                                    startIcon={<SaveIcon/>}
+                                >Save</Button>
+                                : <></>
+                            }
+                        </>
                         : <></>
                 }
             </Stack>

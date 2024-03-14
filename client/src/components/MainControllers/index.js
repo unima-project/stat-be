@@ -13,10 +13,6 @@ const MainController = (props) => {
     const [cookie, setCookie] = useCookies(['token']);
     const [saveStatus, setSaveStatus] = React.useState(false);
 
-    React.useEffect(() => {
-        if (props.corpusId) loadCurrentCorpus();
-    }, [])
-
     const resetState = () => {
         setFileName("");
         props.setKeyword("");
@@ -28,10 +24,10 @@ const MainController = (props) => {
         props.setTokens([]);
     }
 
-    const loadCurrentCorpus = () => {
+    const loadCurrentCorpus = (corpusId) => {
         props.setLoading(true);
 
-        LoadCorpus(props.corpusId, cookie.token)
+        LoadCorpus(corpusId, cookie.token)
             .then(async (data) => {
                 await getTokenList(data.data.corpus);
             })
@@ -163,6 +159,7 @@ const MainController = (props) => {
                 errorState={errorState}
                 saveStatus={saveStatus}
                 setSaveStatus={setSaveStatus}
+                loadCurrentCorpus={loadCurrentCorpus}
             />
         </Box>
     )

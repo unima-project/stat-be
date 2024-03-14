@@ -6,10 +6,8 @@ import MainController from "./MainControllers";
 import {Result} from "./Results";
 import Typography from "@mui/material/Typography";
 import {alertSeverity} from "./Alert";
-import {useParams} from 'react-router-dom';
 
 export const Tool = (props) => {
-    const {corpusId} = useParams();
     const [tokens, setTokens] = React.useState([]);
     const [alertStatus, setAlertStatus] = React.useState({
         message: "", severity: alertSeverity.INFO
@@ -45,7 +43,6 @@ export const Tool = (props) => {
                     Simple Text Analysis Tool
                 </Typography>
                 <MainController
-                    corpusId ={corpusId}
                     tokens={tokens}
                     setTokens={setTokens}
                     alertStatus={alertStatus}
