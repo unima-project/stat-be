@@ -1,9 +1,10 @@
 import logging
 from functools import wraps
-from flask import request, jsonify, g
+from flask import request, jsonify
 from apis.controllers.controller_common import Response, ERROR
 from utils.util_security import Decode_jwt_token
-from models.model_user import Find_user_by_id, USER_ADMIN
+from models.model_user import Find_user_by_id
+from models.model_common import USER_ADMIN
 
 
 def Token_authentication(func):

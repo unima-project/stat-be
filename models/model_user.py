@@ -4,12 +4,7 @@ from app import db
 from sqlalchemy.sql import func
 from utils.util_security import Generate_hash
 from utils.util_validation import Validate_email
-
-USER_ADMIN = 0
-USER_MEMBER = 1
-
-USER_INACTIVE = 0
-USER_ACTIVE = 1
+from models.model_common import USER_ACTIVE, USER_MEMBER
 
 
 class Users(db.Model):
@@ -59,8 +54,6 @@ def Add_new_user(new_user):
         return f'{err_msg} {err}'
     except sqlalchemy.exc.IntegrityError as err:
         return f'{err_msg} email already registered'
-    except:
-        return 'unknown error add new user'
 
     return None
 
@@ -103,8 +96,6 @@ def Update_current_user(current_user):
         return f'{err_msg} {err}'
     except sqlalchemy.exc.IntegrityError as err:
         return f'{err_msg} {err}'
-    except:
-        return 'unknown error update current user'
 
     return None
 
@@ -119,8 +110,6 @@ def Delete_current_user(current_user):
         return f'{err_msg} {err}'
     except sqlalchemy.exc.IntegrityError as err:
         return f'{err_msg} {err}'
-    except:
-        return 'unknown error delete current user'
 
     return None
 
