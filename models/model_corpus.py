@@ -6,7 +6,6 @@ from sqlalchemy.sql import func
 
 class Corpuses(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(100), nullable=False, unique=True)
     corpus = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     created_at = db.Column(db.DateTime(timezone=True), nullable=False, server_default=func.now())
@@ -17,8 +16,7 @@ def Add_new_corpus(new_corpus):
     err_msg = f'error add new token:'
     try:
         corpus = Corpuses(
-            name=new_corpus['name']
-            , corpus=new_corpus['corpus']
+            corpus=new_corpus['corpus']
             , user_id=new_corpus['user_id']
 
         )
@@ -45,7 +43,7 @@ def View_all_corpus(**filters):
         for corpus in corpus_list:
             corpuses.append({
                 "id": corpus.id
-                , "name": corpus.name
+                , "corpus": f'{corpus.corpus[:50]} ...'
                 , "created_at": corpus.created_at
             })
     except sqlalchemy.exc.OperationalError as err:

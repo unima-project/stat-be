@@ -3,7 +3,6 @@ from models.model_corpus import (
     Add_new_corpus
     , View_all_corpus
     , Delete_current_corpus
-    , Find_corpus_by_id
     , Find_corpus_by_custom_filter
 )
 from apis.controllers.controller_common import Response, ERROR, SUCCESS
@@ -25,8 +24,7 @@ def Register_new_corpus(user_id):
 
     try:
         new_corpus = {
-            "name": request.get_json()['name']
-            , "corpus": request.get_json()['corpus']
+            "corpus": request.get_json()['corpus']
             , "user_id": user_id
         }
 
@@ -88,8 +86,9 @@ def Delete_corpus(user_id):
     )
 
     try:
+        corpus_id = request.args.get('id')
         current_corpus, err = Find_corpus_by_custom_filter(
-            id=request.args.get('id')
+            id=corpus_id
             , user_id=user_id
         )
         if err:
@@ -103,6 +102,7 @@ def Delete_corpus(user_id):
             error_response['message'] = err
             return jsonify(error_response), 400
 
+        success_response['message'] = f'Corpus with id {corpus_id} successfully deleted'
         return success_response, 200
     except KeyError as err:
         err_msg = f'error delete current corpus: {err} required'

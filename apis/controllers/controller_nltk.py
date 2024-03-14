@@ -17,7 +17,10 @@ def Get_tokens():
     try:
         text = request.get_json()['text']
         tokens = Tokenizing(text)
-        response['data'] = tokens
+        response['data'] = {
+            "token": tokens
+            , "corpus": text
+        }
     except KeyError as err:
         response['status'] = ERROR
         response['message'] = f'{err} required'
@@ -53,7 +56,10 @@ def Get_tokens_upload():
         tokens = Tokenizing(joined_text)
 
         response['message'] = f'{f.filename} successfully uploaded'
-        response['data'] = tokens
+        response['data'] = {
+            "token": tokens
+            , "corpus": joined_text
+        }
     except:
         err = "error uploading file"
         response['status'] = ERROR
