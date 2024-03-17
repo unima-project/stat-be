@@ -13,26 +13,26 @@ from middlewares.middleware_authentication import Token_authentication, Token_ad
 
 @app.route('/users/register', methods=['POST'])
 @Token_admin_authentication
-def User_register():
-    return Create_new_user()
+def User_register(user_id):
+    return Create_new_user(user_id)
 
 
 @app.route('/users/list', methods=['GET'])
 @Token_admin_authentication
-def User_list():
-    return Get_all_user_list()
+def User_list(user_id):
+    return Get_all_user_list(user_id)
 
 
 @app.route('/users/update', methods=['PUT'])
 @Token_admin_authentication
-def User_update():
-    return Update_user()
+def User_update(user_id):
+    return Update_user(user_id)
 
 
 @app.route('/users/delete', methods=['DELETE'])
 @Token_admin_authentication
-def User_delete():
-    return Delete_user()
+def User_delete(user_id):
+    return Delete_user(user_id)
 
 
 @app.route('/users/password/update', methods=['PATCH'])
@@ -49,5 +49,5 @@ def User_current(user_id):
 
 @app.route('/users/password/reset', methods=['PATCH'])
 @Token_admin_authentication
-def User_reset_password():
-    return Reset_user_password()
+def User_reset_password(user_id):
+    return Reset_user_password(user_id)

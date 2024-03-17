@@ -5,6 +5,12 @@ from models.model_user import (
     , Find_user_by_id
     , Update_current_user
     , Delete_current_user
+
+    , User_data_validation
+)
+from models.model_corpus import (
+    Delete_current_corpus
+    , Find_corpus_by_custom_filter
 )
 from apis.controllers.controller_common import Response, ERROR, SUCCESS
 from flask import request, jsonify
@@ -12,7 +18,7 @@ from utils.util_security import Generate_random_password, Check_hash, Generate_h
 from utils.util_validation import Validate_email
 
 
-def Create_new_user():
+def Create_new_user(user_id):
     success_response = Response(
         status=SUCCESS
         , message="user successfully created"
@@ -62,7 +68,7 @@ def Create_new_user():
         return jsonify(error_response), 400
 
 
-def Get_all_user_list():
+def Get_all_user_list(user_id):
     success_response = Response(
         status=SUCCESS
         , message="successfully get user list"
@@ -88,7 +94,7 @@ def Get_all_user_list():
         return jsonify(error_response), 400
 
 
-def Update_user():
+def Update_user(user_id):
     success_response = Response(
         status=SUCCESS
         , message="user successfully updated"
@@ -102,7 +108,13 @@ def Update_user():
     )
 
     try:
-        valid_email = Validate_email(request.get_json()['email']);
+        err = User_data_validation(request.get_json())
+        if err:
+            logging.error(err)
+            error_response['message'] = err
+            return jsonify(error_response), 400
+
+        valid_email = Validate_email(request.get_json()['email'])
         if not valid_email:
             err_msg = "email is not valid"
             logging.error(err_msg)
@@ -131,6 +143,7 @@ def Update_user():
             error_response['message'] = err
             return jsonify(error_response), 400
 
+        success_response['message'] = f'user "{current_user.name}" successfully updated'
         return success_response, 200
     except KeyError as err:
         err_msg = f'error update user: {err} required'
@@ -147,7 +160,7 @@ def Update_user():
         return jsonify(error_response), 400
 
 
-def Delete_user():
+def Delete_user(user_id):
     success_response = Response(
         status=SUCCESS
         , message="user successfully deleted"
@@ -161,7 +174,14 @@ def Delete_user():
     )
 
     try:
-        current_user, err = Find_user_by_id(request.args.get('id'))
+        user_id_req = request.args.get('id')
+        if int(user_id) == int(user_id_req):
+            err_msg = "cannot delete current user logged in"
+            logging.error(err_msg)
+            error_response['message'] = err_msg
+            return jsonify(error_response), 400
+
+        current_user, err = Find_user_by_id(user_id_req)
         if err:
             logging.error(err)
             error_response['message'] = err
@@ -170,10 +190,19 @@ def Delete_user():
         err = Delete_current_user(current_user)
         if err:
             logging.error(err)
-            logging.error(err)
             error_response['message'] = err
             return jsonify(error_response), 400
 
+        current_corpus, _ = Find_corpus_by_custom_filter(user_id=user_id_req)
+        if current_corpus:
+            err = Delete_current_corpus(current_corpus)
+            if err:
+                logging.error(err)
+                logging.error(err)
+                error_response['message'] = err
+                return jsonify(error_response), 400
+
+        success_response['message'] = f'user {current_user.name} successfully deleted'
         return success_response, 200
     except KeyError as err:
         err_msg = f'error delete user: {err} required'
@@ -251,7 +280,7 @@ def Update_user_password(user_id):
         return jsonify(error_response), 400
 
 
-def Reset_user_password():
+def Reset_user_password(user_id):
     success_response = Response(
         status=SUCCESS
         , message="user password successfully reset"
@@ -286,7 +315,8 @@ def Reset_user_password():
             return jsonify(error_response), 400
 
         success_response['data'] = {
-            "new_password": new_password
+            "email": current_user.email
+            , "new_password": new_password
         }
         return success_response, 200
     except KeyError as err:
@@ -326,6 +356,7 @@ def Get_current_user(user_id):
 
         user = {
             "id": current_user.id
+            , "user_type": current_user.user_type
             , "name": current_user.name
             , "email": current_user.email
             , "no_ktp": current_user.no_ktp

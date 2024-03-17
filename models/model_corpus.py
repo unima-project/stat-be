@@ -1,7 +1,7 @@
 import sqlalchemy
 
 from app import db
-from sqlalchemy.sql import func
+from sqlalchemy.sql import func, delete
 
 
 class Corpuses(db.Model):
@@ -66,8 +66,6 @@ def Delete_current_corpus(current_corpus):
         return f'{err_msg} {err}'
     except sqlalchemy.exc.IntegrityError as err:
         return f'{err_msg} {err}'
-    except:
-        return 'unknown error delete current corpus'
 
     return None
 

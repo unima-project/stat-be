@@ -53,7 +53,8 @@ def Login():
                 return jsonify(error_response), 401
 
             success_response["data"] = {
-                "name": curr_user.name
+                "id": curr_user.id
+                , "name": curr_user.name
                 , "token": token
             }
 

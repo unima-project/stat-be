@@ -24,16 +24,29 @@ class Users(db.Model):
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
 
 
+def User_data_validation(user):
+    for key in user:
+        value = user[key]
+        if value == "" or value is None:
+            return f'{key} required'
+
+    valid_email = Validate_email(user['email'])
+    if not valid_email:
+        return "email is not valid"
+
+    return None
+
+
 def Add_new_user(new_user):
     err_msg = f'error add new user:'
     try:
-        pw_hash, err = Generate_hash(new_user['password'])
+        err = User_data_validation(new_user)
         if err:
             return err
 
-        valid_email = Validate_email(new_user['email']);
-        if not valid_email:
-            return "email is not valid"
+        pw_hash, err = Generate_hash(new_user['password'])
+        if err:
+            return err
 
         user = Users(
             user_type=new_user['user_type']
@@ -63,14 +76,16 @@ def View_all_user():
     users = []
 
     try:
-        user_list = Users.query.order_by(Users.status).all()
+        user_list = Users.query.all()
 
         for user in user_list:
             users.append({
                 "id": user.id
+                , "user_type": user.user_type
                 , "name": user.name
                 , "email": user.email
                 , "no_ktp": user.no_ktp
+
                 , "no_hp": user.no_hp
                 , "address": user.address
                 , "reason": user.reason
@@ -79,7 +94,7 @@ def View_all_user():
     except sqlalchemy.exc.OperationalError as err:
         return None, f'{err_msg} {err}'
     except sqlalchemy.exc.IntegrityError as err:
-        return None,f'{err_msg} {err}'
+        return None, f'{err_msg} {err}'
     except:
         return None, 'unknown error view all user'
 
