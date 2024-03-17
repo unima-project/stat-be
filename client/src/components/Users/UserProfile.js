@@ -1,7 +1,7 @@
 import React from 'react';
 import Box from "@mui/material/Box";
 import {SetupCookies} from '../../Helpers/cookie';
-import {GetUserProfile, UpdateUserPassword} from "../../models";
+import {GetUserProfile} from "../../models";
 import {Loading} from "../commons/Loading";
 import {AlertNotification, alertSeverity, defaultAlertStatus} from "../commons/Alert";
 import {UserProfileController} from "./UserProfileController";

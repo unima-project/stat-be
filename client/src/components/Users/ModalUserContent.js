@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Unstable_Grid2";
-import {userType, userStatus, userTypeConfig, userTypeItems} from "../../models";
+import {userStatus, userTypeItems} from "../../models";
 import * as React from "react";
 import FormControl from "@mui/material/FormControl";
 import Typography from "@mui/material/Typography";

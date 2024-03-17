@@ -14,7 +14,6 @@ import SaveIcon from "@mui/icons-material/Save";
 import DialogActions from "@mui/material/DialogActions";
 import {UpdateUserPassword} from "../../models";
 import {SetupCookies} from '../../Helpers/cookie';
-import {userAction} from "./index";
 
 export const UserChangePasswordForm = (props) => {
     const {cookie} = SetupCookies();

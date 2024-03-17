@@ -2,14 +2,9 @@ import * as React from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import {defaultUserData} from '../../models';
-import {userAction} from "./index";
-import Button from "@mui/material/Button";
-import SaveIcon from "@mui/icons-material/Save";
-import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import {AlertNotification} from "../commons/Alert";
 import {ModalUserContent} from "./ModalUserContent";
 

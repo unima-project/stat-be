@@ -30,7 +30,6 @@ export const AlertNotification = (props) => {
     }
 
     const setupTimeout = () => {
-        let i = 7
         const to = setTimeout(() => {
             setAlertStatus(defaultAlertStatus);
         },7000)
