@@ -1,11 +1,12 @@
 import * as React from 'react';
 import Box from "@mui/system/Box";
-import {AuthLogin} from "../../models/Auth";
-import {AlertNotification} from "../Alert";
+import {AuthLogin} from "../../models";
+import {AlertNotification} from "../commons/Alert";
 import {useNavigate} from "react-router-dom";
 import {LoginForm} from "./Login";
-import {alertSeverity} from "../Alert";
-import {SetupCookies} from "../Helpers/cookie";
+import {alertSeverity} from "../commons/Alert";
+import {SetupCookies} from "../../Helpers/cookie";
+import Grid from '@mui/material/Grid';
 
 export const Login = (props) => {
     const navigate = useNavigate();
@@ -42,6 +43,7 @@ export const Login = (props) => {
 
                 setCookie('token', data.data.token, options);
                 setCookie('name', data.data.name, options);
+                setCookie('id', data.data.id, options);
 
                 navigate("/");
             })
@@ -54,21 +56,22 @@ export const Login = (props) => {
     }
 
     return (
-        <Box sx={{
-            p: 5
-            , border: '1px solid darkGrey'
-            , textAlign: 'center'
-            , marginTop: 20
-            , marginLeft: 45
-            , marginRight: 45
-        }}>
-            {
-                cookieUserToken ?
-                    <></> : <>
-                        <AlertNotification alertStatus={alertStatus} setAlertStatus={setAlertStatus}/>
-                        <LoginForm handleSubmit={handleSubmit} handleChange={handleChange} auth={auth}/>
-                    </>
-            }
-        </Box>
+        <center>
+            <Box sx={{
+                textAlign: 'center'
+                , mt: 20
+                , maxWidth: "350pt"
+            }}>
+
+                {
+                    cookieUserToken ?
+                        <></> : <>
+                            <AlertNotification alertStatus={alertStatus} setAlertStatus={setAlertStatus}/>
+                            <LoginForm handleSubmit={handleSubmit} handleChange={handleChange} auth={auth}/>
+                        </>
+                }
+
+            </Box>
+        </center>
     );
 }

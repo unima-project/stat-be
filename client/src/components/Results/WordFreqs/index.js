@@ -3,7 +3,7 @@ import Grid from "@mui/system/Unstable_Grid";
 import WordCloudChart from "./WordCloudChart";
 import LineChart from "./LineChart";
 import {GetWordFreqList} from "../../../models";
-import {alertSeverity} from "../../Alert";
+import {alertSeverity} from "../../commons/Alert";
 
 const WordFreq = (props) => {
     const [wordFrequencies, setWordFrequencies] = React.useState([])

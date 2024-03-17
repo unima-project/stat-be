@@ -21,11 +21,11 @@ export const ModalCorpus = (props) => {
     return (
         <>
             <Button
-                variant="outlined"
+                variant="contained"
                 color="success"
                 onClick={handleClickOpen}
                 startIcon={<TextSnippetIcon/>}
-            >Corpus List</Button>
+            >Corpus</Button>
             <Dialog
                 onClose={handleClose}
                 open={open}
@@ -40,12 +40,13 @@ export const ModalCorpus = (props) => {
                         right: 8,
                         top: 8,
                     }}
-                ><CloseIcon />
+                ><CloseIcon/>
                 </IconButton>
                 <DialogContent dividers>
                     <Corpus
                         loadCurrentCorpus={props.loadCurrentCorpus}
                         handleModalClose={handleClose}
+                        setConfirmationConfig={props.setConfirmationConfig}
                     />
                 </DialogContent>
             </Dialog>

@@ -2,13 +2,22 @@ import React from 'react';
 import Box from "@mui/system/Box";
 import {Button, Stack} from "@mui/material";
 import SaveIcon from '@mui/icons-material/Save';
-import {alertSeverity} from "../Alert";
+import {alertSeverity} from "../commons/Alert";
 import {ModalCorpus} from "./ModalCorpus";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 
 export const InputController = (props) => {
+    const handleSaveCorpus = () => {
+        props.setConfirmationConfig({
+            open: true
+            , title: "Save Corpus"
+            , okFunction: props.saveCorpus
+            , content: `Are you sure want to save the corpus ?`
+        });
+    }
+
     return (<>
         <Box sx={{marginBottom: 1, textAlign: "center"}}>
                     <textarea
@@ -22,13 +31,19 @@ export const InputController = (props) => {
         <Box>
             <Stack direction="row" spacing={1}>
                 <Button
+                    color="primary"
                     size="small"
                     variant="contained"
                     onClick={props.handleReveal}
                     startIcon={<VisibilityIcon/>}
                 >Reveal</Button>
-                <Button size="small" variant="outlined" component="label" startIcon={<CloudUploadIcon/>}>
-                    Upload
+                <Button
+                    color="info"
+                    size="small"
+                    variant="contained"
+                    component="label"
+                    startIcon={<CloudUploadIcon/>}
+                >Upload
                     {
                         props.fileName === "" ?
                             <input
@@ -42,7 +57,7 @@ export const InputController = (props) => {
                 <Button
                     size="small"
                     color="error"
-                    variant="outlined"
+                    variant="contained"
                     onClick={() => {
                         props.errorState();
                         props.resetState();
@@ -57,17 +72,20 @@ export const InputController = (props) => {
                 {
                     props.cookie.token ?
                         <>
-                            <ModalCorpus loadCurrentCorpus={props.loadCurrentCorpus}/>
+                            <ModalCorpus
+                                loadCurrentCorpus={props.loadCurrentCorpus}
+                                setConfirmationConfig={props.setConfirmationConfig}
+                            />
                             {
-                            props.saveStatus && props.text !== "" ?
-                                <Button
-                                    size="small"
-                                    color="secondary"
-                                    variant="contained"
-                                    onClick={props.saveCorpus}
-                                    startIcon={<SaveIcon/>}
-                                >Save</Button>
-                                : <></>
+                                props.saveStatus && props.text !== "" ?
+                                    <Button
+                                        size="small"
+                                        color="secondary"
+                                        variant="contained"
+                                        onClick={handleSaveCorpus}
+                                        startIcon={<SaveIcon/>}
+                                    >Save</Button>
+                                    : <></>
                             }
                         </>
                         : <></>

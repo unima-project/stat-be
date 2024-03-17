@@ -28,6 +28,27 @@ export const CorpusList = (props) => {
         setRowData();
     }, [props.corpusList])
 
+    const handleDeleteCorpus = (corpusId) => {
+        props.setConfirmationConfig({
+            open: true
+            , title: "Delete Corpus"
+            , okFunction: () => props.deleteCurrentCorpus(corpusId)
+            , content: `Are you sure want to delete the corpus ?`
+        });
+    }
+
+    const handleLoadCorpus = (corpusId) => {
+        props.setConfirmationConfig({
+            open: true
+            , title: "Load Corpus"
+            , okFunction: () => {
+                props.loadCurrentCorpus(corpusId);
+                props.handleModalClose();
+            }
+            , content: `Are you sure want to load the corpus ?`
+        });
+    }
+
     const setRowData = () => {
         setRows(props.corpusList.map((corpus, index) => {
             return {
@@ -40,7 +61,7 @@ export const CorpusList = (props) => {
                         variant="outlined"
                         component="label"
                         color="error"
-                        onClick={() => props.deleteCurrentCorpus(corpus.id)}
+                        onClick={() => handleDeleteCorpus(corpus.id)}
                     ><DeleteForeverIcon/>
                     </Button>
                     <Button
@@ -48,10 +69,7 @@ export const CorpusList = (props) => {
                         variant="outlined"
                         component="label"
                         color="primary"
-                        onClick={() => {
-                            props.loadCurrentCorpus(corpus.id);
-                            props.handleModalClose();
-                        }}
+                        onClick={() => handleLoadCorpus(corpus.id)}
                     ><DownloadIcon/>
                     </Button>
                 </Stack>

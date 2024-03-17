@@ -8,7 +8,7 @@ import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import {alertSeverity} from "../Alert";
+import {alertSeverity} from "../commons/Alert";
 
 const columns = [
     {field: 'id', headerName: 'ID', type: 'number', width: 10, align: "right"},

@@ -8,7 +8,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import {Stack} from "@mui/material";
-import {alertSeverity} from "../Alert";
+import {alertSeverity} from "../commons/Alert";
 
 const columns = [
     {field: 'id', headerName: 'ID', type: 'number', width: 10},

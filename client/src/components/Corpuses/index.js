@@ -1,10 +1,10 @@
 import React from 'react';
 import {CorpusList} from "./Corpus";
 import Box from '@mui/material/Box';
-import {DeleteCorpus, GetCorpusList} from "../../models/Corpus";
+import {DeleteCorpus, GetCorpusList} from "../../models";
 import {useNavigate} from "react-router-dom";
-import {AlertNotification, alertSeverity} from "../Alert";
-import {SetupCookies} from "../Helpers/cookie";
+import {AlertNotification, alertSeverity} from "../commons/Alert";
+import {SetupCookies} from "../../Helpers/cookie";
 
 export const Corpus = (props) => {
     const navigate = useNavigate();
@@ -56,6 +56,7 @@ export const Corpus = (props) => {
             deleteCurrentCorpus={DeleteCurrentCorpus}
             loadCurrentCorpus={props.loadCurrentCorpus}
             handleModalClose={props.handleModalClose}
+            setConfirmationConfig = {props.setConfirmationConfig}
         />
     </Box>);
 }

@@ -1,16 +1,16 @@
 import React from 'react';
 import Box from "@mui/system/Box";
 import {GetTokenList, GetTokenListUpload} from "../../models";
-import {LoadCorpus, SaveCorpus} from "../../models/Corpus";
-import {AlertNotification} from "../Alert";
+import {LoadCorpus, SaveCorpus} from "../../models";
+import {AlertNotification} from "../commons/Alert";
 import {InputController} from "./InputController";
-import {useCookies} from "react-cookie";
-import {alertSeverity} from "../Alert";
+import {alertSeverity} from "../commons/Alert";
+import {SetupCookies} from "../../Helpers/cookie";
 
 const MainController = (props) => {
     const [fileName, setFileName] = React.useState("")
     const [text, setText] = React.useState("");
-    const [cookie, setCookie] = useCookies(['token']);
+    const {cookie} = SetupCookies();
     const [saveStatus, setSaveStatus] = React.useState(false);
 
     const resetState = () => {
@@ -160,6 +160,7 @@ const MainController = (props) => {
                 saveStatus={saveStatus}
                 setSaveStatus={setSaveStatus}
                 loadCurrentCorpus={loadCurrentCorpus}
+                setConfirmationConfig={props.setConfirmationConfig}
             />
         </Box>
     )

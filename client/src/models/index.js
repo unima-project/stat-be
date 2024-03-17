@@ -1,79 +1,75 @@
 import axios from "axios";
+import {ApiNltk} from "./Nltk";
+import {ApiAuth} from "./Auth";
+import {ApiCorpus} from "./Corpus";
+import {ApiUser} from "./User";
 
 // const baseUrl = "https://stat-app-dot-stat-415110.et.r.appspot.com";
-export const baseUrl = "http://localhost:5000";
+const baseUrl = "http://localhost:5000";
+const timeOut = 30000
 
+export const axiosInstance = axios.create({
+    baseURL: baseUrl
+    , timeout: timeOut
+});
 
-export const GetCollocationList = async (tokens) => {
+export const apiMethod = {
+    POST: "post"
+    , GET: "get"
+    , DELETE: "delete"
+    , PATCH: "patch"
+    , PUT: "put"
+}
+
+export const HitApi = async (apiRequest) => {
+
     try {
-        const {data} = await axios.post(baseUrl + '/nltk/collocates', {
-            tokens: tokens
+        return await axiosInstance({
+            method: apiRequest.method
+            , url: apiRequest.url
+            , data: apiRequest.data
+            , headers: apiRequest.headers
         })
-
-        return data
     } catch (error) {
-        throw error.response.data.message;
-    }
-};
-
-export const GetTokenList = async (text) => {
-    try {
-        const {data} = await axios.post(baseUrl + '/nltk/tokens', {
-            text: text,
-        })
-
-        return data
-    } catch (error) {
-        throw error.response.data.message;
+        throw error;
     }
 }
 
-export const GetTokenListUpload = async (formData) => {
-    try {
-        const {data} = await axios.post(baseUrl + '/nltk/tokens/upload',
-            formData,
-        )
+export const {
+    GetCollocationList
+    , GetTokenList
+    , GetTokenListUpload
+    , GetConcordanceList
+    , GetWordFreqList
 
-        return data
-    } catch (error) {
-        throw error.response.data.message;
-    }
-}
+    , GetNgramList
+} = ApiNltk();
 
-export const GetConcordanceList = async (tokens, width) => {
-    try {
-        const {data} = await axios.post(baseUrl + '/nltk/concordances', {
-            width: width,
-            tokens: tokens
-        })
+export const {
+    AuthLogin
+    , AuthLogout
+} = ApiAuth();
 
-        return data
-    } catch (error) {
-        throw error.response.data.message;
-    }
-};
+export const {
+    LoadCorpus
+    , DeleteCorpus
+    , SaveCorpus
+    , GetCorpusList
+} = ApiCorpus();
 
-export const GetWordFreqList = async (tokens) => {
-    try {
-        const {data} = await axios.post(baseUrl + '/nltk/word_frequencies', {
-            tokens: tokens
-        })
+export const  {
+    userType
+    , GetUserProfile
+    , UpdateUserPassword
+    , GetUserList
+    , DeleteUser
 
-        return data
-    } catch (error) {
-        throw error.response.data.message;
-    }
-};
+    , userStatus
+    , UpdateUser
+    , CreateUser
+    , ResetUserPassword
+    , userTypeConfig
 
-export const GetNgramList = async (tokens, size) => {
-    try {
-        const {data} = await axios.post(baseUrl + '/nltk/ngrams', {
-            tokens: tokens
-            , size: size
-        })
-
-        return data
-    } catch (error) {
-        throw error.response.data.message;
-    }
-};
+    , defaultUserData
+    , userTypeItems
+} = ApiUser();

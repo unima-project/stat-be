@@ -1,8 +1,9 @@
 import {Home} from './components/Home';
-import {Tool} from  './components/Tool';
-import {ErrorPage} from './components/ErrorPage';
+import {Tool} from './components/Tools';
+import {ErrorPage} from './components/commons/ErrorPage';
 import {Login} from './components/Auths';
-import {UserProfile} from './components/Users/Profile';
+import {UserProfile} from './components/Users/UserProfile';
+import {User} from './components/Users';
 
 const routes = [
     {
@@ -21,6 +22,10 @@ const routes = [
     {
         path: '/users/profile',
         element: <UserProfile />
+    },
+    {
+        path: '/users',
+        element: <User />
     }
 ];
 

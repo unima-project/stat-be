@@ -5,7 +5,7 @@ import Box from '@mui/system/Box'
 import FormControl from "@mui/material/FormControl";
 import {Stack} from "@mui/material";
 import TextField from "@mui/material/TextField";
-import {alertSeverity} from "../Alert";
+import {alertSeverity} from "../commons/Alert";
 
 const columns = [
     {field: 'id', headerName: 'ID', type: 'number', width: 10},
