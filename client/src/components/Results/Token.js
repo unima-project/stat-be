@@ -1,24 +1,14 @@
 import React from 'react';
 import Chip from '@mui/material/Chip';
 import Grid from '@mui/system/Unstable_Grid';
+import {RemoveDuplicateItemList} from "../../Helpers/list";
 
 const Token = (props) => {
     const [wordList, setWordList] = React.useState([]);
 
     React.useEffect(() => {
-        setWordList(removeDuplicate(props.tokens));
+        setWordList(RemoveDuplicateItemList(props.tokens));
     }, [props.tokens, props.keyword])
-
-    const removeDuplicate = (terms) => {
-        const uniqueTerms = []
-        terms.forEach((t) => {
-            if (uniqueTerms.indexOf(t) < 0) {
-                uniqueTerms.push(t);
-            }
-        })
-
-        return uniqueTerms.sort()
-    }
 
     return (
         <>

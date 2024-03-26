@@ -1,26 +1,57 @@
 import React from 'react';
 import {CorpusList} from "./Corpus";
 import Box from '@mui/material/Box';
-import {DeleteCorpus, GetCorpusList} from "../../models";
-import {useNavigate} from "react-router-dom";
-import {AlertNotification, alertSeverity} from "../commons/Alert";
+import {DeleteCorpus, GetCorpusList, GetPublicCorpusList, UpdateCorpusPublicStatus} from "../../models";
+import {AlertNotification, alertSeverity, defaultAlertStatus} from "../commons/Alert";
 import {SetupCookies} from "../../Helpers/cookie";
+import {UserProfile} from "../../Helpers/userProfile"
 
 export const Corpus = (props) => {
-    const navigate = useNavigate();
     const [corpusList, setCorpusList] = React.useState([]);
-    const {cookieUserToken, cookie} = SetupCookies();
+    const {cookie} = SetupCookies();
     const [alertStatus, setAlertStatus] = React.useState({
         message: "", severity: alertSeverity.INFO
     });
+    const {isMember} = UserProfile();
 
     React.useEffect(() => {
-        if (!cookieUserToken) navigate("/");
         GetCorpus();
-    }, [cookieUserToken])
+        const intervalGetCorpus = setInterval(() => {
+            GetCorpus();
+        }, 5000);
+
+        if (props.alertStatus) {
+            setAlertStatus(props.alertStatus);
+        }
+
+        return () => {
+            clearInterval(intervalGetCorpus);
+        }
+    }, [cookie, isMember, props.alertStatus])
 
     const GetCorpus = () => {
-        GetCorpusList(cookieUserToken)
+        if (isMember) {
+            GetAllCorpus();
+        } else {
+            GetPublicCorpus();
+        }
+    }
+
+    const GetAllCorpus = () => {
+        GetCorpusList(cookie.token)
+            .then((data) => {
+                setCorpusList(data.data);
+            })
+            .catch(error => {
+                setAlertStatus({
+                    severity: alertSeverity.ERROR
+                    , message: `${error}`
+                })
+            })
+    }
+
+    const GetPublicCorpus = () => {
+        GetPublicCorpusList()
             .then((data) => {
                 setCorpusList(data.data);
             })
@@ -49,6 +80,27 @@ export const Corpus = (props) => {
             })
     }
 
+    const UpdateCurrentCorpus = (corpus) => {
+        UpdateCorpusPublicStatus(corpus, cookie.token)
+            .then(data => {
+                setAlertStatus({
+                    severity: alertSeverity.SUCCESS
+                    , message: `${data.message}`
+                })
+                GetCorpus();
+            })
+            .catch(error => {
+                setAlertStatus({
+                    severity: alertSeverity.ERROR
+                    , message: `${error}`
+                })
+            })
+    }
+
+    const LoadCurrentPublicCorpus = () => {
+
+    }
+
     return (<Box>
         <AlertNotification alertStatus={alertStatus} setAlertStatus={setAlertStatus}/>
         <CorpusList
@@ -56,7 +108,9 @@ export const Corpus = (props) => {
             deleteCurrentCorpus={DeleteCurrentCorpus}
             loadCurrentCorpus={props.loadCurrentCorpus}
             handleModalClose={props.handleModalClose}
-            setConfirmationConfig = {props.setConfirmationConfig}
+            setConfirmationConfig={props.setConfirmationConfig}
+            updateCurrentCorpus={UpdateCurrentCorpus}
+            isMember={isMember}
         />
     </Box>);
 }

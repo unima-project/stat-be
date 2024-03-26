@@ -1,16 +1,13 @@
 import React from 'react';
 import Box from "@mui/system/Box";
-import {GetTokenList, GetTokenListUpload} from "../../models";
-import {LoadCorpus, SaveCorpus} from "../../models";
+import {GetTokenListUpload} from "../../models";
+import {SaveCorpus} from "../../models";
 import {AlertNotification} from "../commons/Alert";
 import {InputController} from "./InputController";
 import {alertSeverity} from "../commons/Alert";
-import {SetupCookies} from "../../Helpers/cookie";
 
 const MainController = (props) => {
     const [fileName, setFileName] = React.useState("")
-    const [text, setText] = React.useState("");
-    const {cookie} = SetupCookies();
     const [saveStatus, setSaveStatus] = React.useState(false);
 
     const resetState = () => {
@@ -19,34 +16,10 @@ const MainController = (props) => {
         props.setLoading(false);
     }
 
-    const errorState = () => {
-        setText("");
-        props.setTokens([]);
-    }
-
-    const loadCurrentCorpus = (corpusId) => {
-        props.setLoading(true);
-
-        LoadCorpus(corpusId, cookie.token)
-            .then(async (data) => {
-                await getTokenList(data.data.corpus);
-            })
-            .catch(error => {
-                props.setAlertStatus({
-                    severity: alertSeverity.ERROR
-                    , message: `load corpus: ${error}`
-                })
-            })
-            .finally(() => {
-                props.setLoading(false);
-                setSaveStatus(false);
-            })
-    }
-
     const saveCorpus = () => {
         props.setLoading(true);
 
-        SaveCorpus(text, cookie.token)
+        SaveCorpus(props.text, props.cookie.token)
             .then(data => {
                 props.setAlertStatus({
                     severity: alertSeverity.SUCCESS
@@ -65,29 +38,13 @@ const MainController = (props) => {
             })
     }
 
-    const getTokenList = async (text) => {
-        props.setLoading(true);
-
-        try {
-            const data = await GetTokenList(text)
-            props.setTokens(data.data.token);
-            setText(data.data.corpus);
-        } catch (error) {
-            props.setAlertStatus({
-                severity: alertSeverity.ERROR
-                , message: `get token list: ${error}`
-            })
-            errorState();
-        }
-    }
-
     const handleReveal = () => {
         props.setAlertStatus({
             severity: alertSeverity.INFO
             , message: ""
         })
 
-        getTokenList(text)
+        props.getTokenList(props.text)
             .then(() => {
                 setSaveStatus(true);
             })
@@ -97,7 +54,12 @@ const MainController = (props) => {
     }
 
     const handleTextChange = (event) => {
-        setText(event.target.value)
+        props.setText(event.target.value)
+    }
+
+    const loadCurrentCorpus = (corpus_id) => {
+        props.loadCurrentCorpus(corpus_id);
+        setSaveStatus(false);
     }
 
     const handleUpload = (event) => {
@@ -122,7 +84,7 @@ const MainController = (props) => {
         GetTokenListUpload(formData)
             .then(data => {
                 props.setTokens(data.data.token);
-                setText(data.data.corpus);
+                props.setText(data.data.corpus);
                 setSaveStatus(true);
             })
             .catch(error => {
@@ -130,7 +92,7 @@ const MainController = (props) => {
                     severity: alertSeverity.ERROR
                     , message: `handle upload: ${error}`
                 })
-               errorState();
+               props.errorState();
             })
             .finally(() => {
                 resetState();
@@ -149,16 +111,19 @@ const MainController = (props) => {
                 alertStatus={props.alertStatus}
                 handleReveal={handleReveal}
                 handleUpload={handleUpload}
+
                 handleTextChange={handleTextChange}
-                text={text}
-                setText={setText}
+                text={props.text}
+                setText={props.setText}
                 fileName={fileName}
                 saveCorpus={saveCorpus}
-                cookie={cookie}
+
+                isMember={props.isMember}
                 resetState={resetState}
-                errorState={errorState}
+                errorState={props.errorState}
                 saveStatus={saveStatus}
                 setSaveStatus={setSaveStatus}
+
                 loadCurrentCorpus={loadCurrentCorpus}
                 setConfirmationConfig={props.setConfirmationConfig}
             />

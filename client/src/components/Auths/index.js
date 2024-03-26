@@ -1,12 +1,13 @@
 import * as React from 'react';
 import Box from "@mui/system/Box";
-import {AuthLogin} from "../../models";
+import {AuthLogin, userType} from "../../models";
 import {AlertNotification} from "../commons/Alert";
 import {useNavigate} from "react-router-dom";
 import {LoginForm} from "./Login";
 import {alertSeverity} from "../commons/Alert";
 import {SetupCookies} from "../../Helpers/cookie";
 import Grid from '@mui/material/Grid';
+import {UserProfile} from "../../Helpers/userProfile";
 
 export const Login = (props) => {
     const navigate = useNavigate();
@@ -33,7 +34,7 @@ export const Login = (props) => {
     const handleSubmit = (event) => {
         event.preventDefault();
         AuthLogin(auth)
-            .then((data) => {
+            .then(data => {
                 const date = new Date();
                 const expiresDate = new Date(date.getTime() + (60 * 60 * 1000));
                 const options = {
@@ -45,7 +46,11 @@ export const Login = (props) => {
                 setCookie('name', data.data.name, options);
                 setCookie('id', data.data.id, options);
 
-                navigate("/");
+                if (data.data.type === userType.USER_ADMIN.value) {
+                    navigate("/users");
+                } else {
+                    navigate("/");
+                }
             })
             .catch(error => {
                 setAlertStatus({

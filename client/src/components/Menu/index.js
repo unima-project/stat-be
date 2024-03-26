@@ -9,9 +9,39 @@ import AdbIcon from '@mui/icons-material/Adb';
 import {Link} from "react-router-dom";
 import {SetupCookies} from '../../Helpers/cookie';
 import {MenuList} from "./MenuList";
+import {UserProfile} from "../../Helpers/userProfile";
+import HomeIcon from '@mui/icons-material/Home';
+import QueryStatsIcon from '@mui/icons-material/QueryStats';
+import VpnKeyIcon from '@mui/icons-material/VpnKey';
 
 export const MainMenu = () => {
     const {cookie, removeCookie} = SetupCookies();
+    const {isAdmin, isLogin} = UserProfile();
+
+    React.useEffect(() => {},[isAdmin, isLogin, cookie]);
+
+    const homeMenu = <>
+        <Link to={'/'}>
+            <Button
+                sx={{my: 2, color: 'white'}}
+                startIcon={<HomeIcon/>}
+            >Home</Button>
+        </Link>
+        <Link to={'/tools'}>
+            <Button
+                sx={{my: 2, color: 'white'}}
+                startIcon={<QueryStatsIcon/>}
+            >Tool</Button>
+        </Link>
+    </>
+
+    const setupHomeMenu = () => {
+        if (!isAdmin) {
+            return homeMenu
+        } else {
+            return <></>
+        }
+    }
 
     return (
         <AppBar position="fixed">
@@ -34,25 +64,21 @@ export const MainMenu = () => {
                         STAT
                     </Typography>
                     <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
-                        <Link to={'/'}>
-                            <Button sx={{my: 2, display: 'block', color: 'white'}}>
-                                Home
-                            </Button>
-                        </Link>
-                        <Link to={'/tools'}>
-                            <Button sx={{my: 2, display: 'block', color: 'white'}}>
-                                Tool
-                            </Button>
-                        </Link>
+                        {setupHomeMenu()}
                     </Box>
-
                     {
-                        (cookie.token) ?
-                            <MenuList cookie={cookie} removeCookie={removeCookie}/> :
+                        isLogin ?
+                            <MenuList
+                                cookie={cookie}
+                                removeCookie={removeCookie}
+                                isAdmin={isAdmin}
+                                isLogin={isLogin}
+                            /> :
                             <Link to={'/auth/login'}>
-                                <Button sx={{my: 2, display: 'block', color: 'white'}}>
-                                    Login
-                                </Button>
+                                <Button
+                                    sx={{my: 2, color: 'white'}}
+                                    endIcon={<VpnKeyIcon/>}
+                                >Login</Button>
                             </Link>
                     }
                 </Toolbar>

@@ -8,7 +8,7 @@ import {ApiUser} from "./User";
 const baseUrl = "http://localhost:5000";
 const timeOut = 30000
 
-export const axiosInstance = axios.create({
+const axiosInstance = axios.create({
     baseURL: baseUrl
     , timeout: timeOut
 });
@@ -55,6 +55,12 @@ export const {
     , DeleteCorpus
     , SaveCorpus
     , GetCorpusList
+    , UpdateCorpusPublicStatus
+
+    , corpusPublicStatusConfig
+    , corpusPublicStatus
+    , GetPublicCorpusList
+    , LoadPublicCorpus
 } = ApiCorpus();
 
 export const  {

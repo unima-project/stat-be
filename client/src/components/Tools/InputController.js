@@ -9,6 +9,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 
 export const InputController = (props) => {
+
     const handleSaveCorpus = () => {
         props.setConfirmationConfig({
             open: true
@@ -70,7 +71,7 @@ export const InputController = (props) => {
                     startIcon={<RestartAltIcon/>}
                 >Reset</Button>
                 {
-                    props.cookie.token ?
+                    props.isMember ?
                         <>
                             <ModalCorpus
                                 loadCurrentCorpus={props.loadCurrentCorpus}

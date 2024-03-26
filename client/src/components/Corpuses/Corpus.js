@@ -10,23 +10,67 @@ import TableRow from '@mui/material/TableRow';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import DownloadIcon from '@mui/icons-material/Download';
 import {Button, Stack} from "@mui/material";
+import Switch from "@mui/material/Switch";
+import {corpusPublicStatusConfig} from "../../models";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+
+const columnConfig = {
+    ID: {
+        id: 'id'
+        , label: 'Id'
+        , minWidth: 10
+    }
+    , CORPUS: {
+        id: 'corpus'
+        , label: 'Corpus'
+        , minWidth: 50
+    }
+    , PUBLIC: {
+        id: 'public'
+        , label: 'Public'
+        , minWidth: 10
+    }
+    , CREATED_AT: {
+        id: 'created_at'
+        , label: 'Created At'
+        , minWidth: 10
+    }
+    , ACTION: {
+        id: 'action'
+        , label: ''
+        , minWidth: 10
+    }
+}
+
+const rowsPerPageOptions = [5, 10, 25, 50];
 
 export const CorpusList = (props) => {
     const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [rowsPerPage, setRowsPerPage] = React.useState(rowsPerPageOptions[0]);
     const [rows, setRows] = React.useState([]);
-
-    const columns = [
-        {id: 'id', label: 'Id', minWidth: 10},
-        {id: 'text', label: 'Text', minWidth: 50},
-        {id: 'created_at', label: 'Created At', minWidth: 10},
-        {id: 'action', label: '', minWidth: 10},
-    ];
-
+    const [columns, setColumns] = React.useState([]);
 
     React.useEffect(() => {
         setRowData();
+        setupColumn();
     }, [props.corpusList])
+
+    const setupColumn = () => {
+        const columnList = [];
+        for (const col in columnConfig) {
+            if (!props.isMember && columnConfig[col].label === columnConfig.PUBLIC.label) {
+                continue
+            }
+
+            columnList.push({
+                id: columnConfig[col].id
+                , label: columnConfig[col].label
+                , minWidth: columnConfig[col].minWidth
+            })
+        }
+
+        setColumns(columnList);
+    }
 
     const handleDeleteCorpus = (corpusId) => {
         props.setConfirmationConfig({
@@ -37,15 +81,35 @@ export const CorpusList = (props) => {
         });
     }
 
-    const handleLoadCorpus = (corpusId) => {
+    const handleLoadCorpus = (corpusId, isDownload) => {
+        let content = `Are you sure want to load the corpus ?`
+        if (isDownload) {
+            content = `Are you sure want to download the token list ?`
+        }
+
         props.setConfirmationConfig({
             open: true
             , title: "Load Corpus"
             , okFunction: () => {
-                props.loadCurrentCorpus(corpusId);
-                props.handleModalClose();
+                props.loadCurrentCorpus(corpusId, isDownload);
+                if (props.isMember) {
+                    props.handleModalClose();
+                }
             }
-            , content: `Are you sure want to load the corpus ?`
+            , content: content
+        });
+    }
+
+    const publicOnChange = (event, corpus) => {
+        const checked = event.target.checked ? 1 : 0;
+        corpus.public = checked;
+        props.setConfirmationConfig({
+            open: true
+            , title: "Update Corpus"
+            , okFunction: () => {
+                props.updateCurrentCorpus(corpus);
+            }
+            , content: `Are you sure want to set ${corpusPublicStatusConfig[checked].label} ?`
         });
     }
 
@@ -53,25 +117,39 @@ export const CorpusList = (props) => {
         setRows(props.corpusList.map((corpus, index) => {
             return {
                 id: index + 1
-                , text: corpus.corpus
+                , corpus: corpus.corpus
+                , public: <Switch
+                    checked={corpus.public}
+                    onChange={(event) => {
+                        publicOnChange(event, corpus);
+                    }}
+                />
                 , created_at: corpus.created_at
                 , action: <Stack direction="row" spacing={2}>
                     <Button
                         size="small"
                         variant="outlined"
                         component="label"
-                        color="error"
-                        onClick={() => handleDeleteCorpus(corpus.id)}
-                    ><DeleteForeverIcon/>
-                    </Button>
+                        color="primary"
+                        onClick={() => handleLoadCorpus(corpus.id, false)}
+                    ><VisibilityIcon/></Button>
                     <Button
                         size="small"
                         variant="outlined"
                         component="label"
-                        color="primary"
-                        onClick={() => handleLoadCorpus(corpus.id)}
-                    ><DownloadIcon/>
-                    </Button>
+                        color="success"
+                        onClick={() => handleLoadCorpus(corpus.id, true)}
+                    ><DownloadIcon/></Button>
+                    {
+                        props.isMember ?
+                            <Button
+                                size="small"
+                                variant="outlined"
+                                component="label"
+                                color="error"
+                                onClick={() => handleDeleteCorpus(corpus.id)}
+                            ><DeleteForeverIcon/></Button> : <></>
+                    }
                 </Stack>
             }
         }));
@@ -126,7 +204,7 @@ export const CorpusList = (props) => {
                 </Table>
             </TableContainer>
             <TablePagination
-                rowsPerPageOptions={[10, 25, 100]}
+                rowsPerPageOptions={rowsPerPageOptions}
                 component="div"
                 count={rows.length}
                 rowsPerPage={rowsPerPage}
@@ -135,5 +213,6 @@ export const CorpusList = (props) => {
                 onRowsPerPageChange={handleChangeRowsPerPage}
             />
         </Paper>
-    );
+    )
+        ;
 }

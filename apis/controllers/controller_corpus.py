@@ -4,6 +4,7 @@ from models.model_corpus import (
     , View_all_corpus
     , Delete_current_corpus
     , Find_corpus_by_custom_filter
+    , Update_current_corpus
 )
 from apis.controllers.controller_common import Response, ERROR, SUCCESS
 from flask import request, jsonify
@@ -61,6 +62,32 @@ def Get_all_corpus_list(user_id):
 
     try:
         corpus_list, err = View_all_corpus(user_id=user_id)
+        if err:
+            logging.error(err)
+            error_response['message'] = err
+            return jsonify(error_response), 400
+
+        success_response['data'] = corpus_list
+        return success_response, 200
+    except:
+        return jsonify(error_response), 400
+
+
+def Get_all_public_corpus_list():
+    success_response = Response(
+        status=SUCCESS
+        , message="successfully get public corpus list"
+        , data=None
+    )
+
+    error_response = Response(
+        status=ERROR
+        , message="failed to get public corpus list"
+        , data=None
+    )
+
+    try:
+        corpus_list, err = View_all_corpus(public=1)
         if err:
             logging.error(err)
             error_response['message'] = err
@@ -145,6 +172,76 @@ def Load_current_corpus(user_id, corpus_id):
         success_response['data'] = {
             "corpus": current_corpus.corpus
         }
+        return success_response, 200
+    except TypeError as err:
+        logging.error(err)
+        error_response['message'] = err
+        return jsonify(error_response), 400
+
+
+def Load_current_public_corpus(corpus_id):
+    success_response = Response(
+        status=SUCCESS
+        , message="successfully load current public corpus"
+        , data=None
+    )
+
+    error_response = Response(
+        status=ERROR
+        , message="failed to load current public corpus"
+        , data=None
+    )
+
+    try:
+        current_corpus, err = Find_corpus_by_custom_filter(
+            id=corpus_id
+            , public=1
+        )
+        if err:
+            logging.error(err)
+            error_response['message'] = err
+            return jsonify(error_response), 400
+
+        success_response['data'] = {
+            "corpus": current_corpus.corpus
+        }
+        return success_response, 200
+    except TypeError as err:
+        logging.error(err)
+        error_response['message'] = err
+        return jsonify(error_response), 400
+
+
+def Update_corpus_public_status(user_id):
+    success_response = Response(
+        status=SUCCESS
+        , message="successfully update current corpus public status"
+        , data=None
+    )
+
+    error_response = Response(
+        status=ERROR
+        , message="failed to update current corpus public status"
+        , data=None
+    )
+
+    try:
+        current_corpus, err = Find_corpus_by_custom_filter(
+            id=request.get_json()['id']
+            , user_id=user_id
+        )
+        if err:
+            logging.error(err)
+            error_response['message'] = err
+            return jsonify(error_response), 400
+
+        current_corpus.public = request.get_json()['public']
+        err = Update_current_corpus(current_corpus)
+        if err:
+            logging.error(err)
+            error_response['message'] = err
+            return jsonify(error_response), 400
+
         return success_response, 200
     except TypeError as err:
         logging.error(err)

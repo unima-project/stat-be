@@ -1,8 +1,19 @@
 import React from 'react';
 import Box from "@mui/system/Box";
 import simalungun from './image/simalungun.png';
+import {useNavigate} from "react-router-dom";
+import {UserProfile} from "../Helpers/userProfile";
 
 export const Home = () => {
+    const navigate = useNavigate();
+    const {isAdmin} = UserProfile();
+
+    React.useEffect(() => {
+        if (isAdmin) {
+            navigate("/users")
+        }
+    }, [isAdmin])
+
     return (
         <Box sx={{p: 2, m: 3, border: '1px dashed lightGrey', textAlign: 'center', marginTop: 10}}>
             <h1>Title</h1>

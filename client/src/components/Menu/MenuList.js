@@ -4,16 +4,18 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
-import {AuthLogout, GetUserProfile, userType} from "../../models";
+import {AuthLogout} from "../../models";
 import {useNavigate} from "react-router-dom";
 
 export const MenuList = (props) => {
     const navigate = useNavigate();
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const [listMenu, setListMenu] = React.useState([]);
+    const [userName, setUserName] = React.useState("");
 
     React.useEffect(() => {
-        if (props.cookie.token) {
+        if (props.isLogin) {
+            setUserName(props.cookie.name);
             setListMenu(memberSettings);
             menuSetting();
         }
@@ -72,15 +74,9 @@ export const MenuList = (props) => {
     ]
 
     const menuSetting = () => {
-        GetUserProfile(props.cookie.token)
-            .then(data => {
-                if (data.data.user_type === userType.USER_ADMIN.value) {
-                    setListMenu(adminSetting.concat([...memberSettings]));
-                }
-            })
-            .catch(err => {
-                alert(`menu setting ${err}`);
-            })
+        if (props.isAdmin) {
+            setListMenu(adminSetting.concat([...memberSettings]));
+        }
     }
 
     const menuList = <>
@@ -88,9 +84,7 @@ export const MenuList = (props) => {
             sx={{color: 'white', my: 2}}
             endIcon={<AccountCircle/>}
             onClick={handleOpenUserMenu}
-        >
-            {props.cookie.name.split(" ")[0]}
-        </Button>
+        >{userName.split(" ")[0]}</Button>
         <Menu
             sx={{mt: '45px'}}
             id="menu-appbar"

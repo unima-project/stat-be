@@ -56,6 +56,7 @@ def Login():
                 "id": curr_user.id
                 , "name": curr_user.name
                 , "token": token
+                , "type": curr_user.user_type
             }
 
             resp = make_response(jsonify(success_response))

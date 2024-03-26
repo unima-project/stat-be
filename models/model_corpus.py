@@ -1,13 +1,14 @@
 import sqlalchemy
 
 from app import db
-from sqlalchemy.sql import func, delete
+from sqlalchemy.sql import func, desc
 
 
 class Corpuses(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     corpus = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    public = db.Column(db.Integer, nullable=False, default=1)
     created_at = db.Column(db.DateTime(timezone=True), nullable=False, server_default=func.now())
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
 
@@ -38,18 +39,23 @@ def View_all_corpus(**filters):
     corpuses = []
 
     try:
-        corpus_list =Corpuses.query.filter_by(**filters).order_by(Corpuses.created_at).all()
+        corpus_list = (
+            Corpuses.query.filter_by(**filters)
+            .order_by(desc(Corpuses.created_at))
+            .all()
+        )
 
         for corpus in corpus_list:
             corpuses.append({
                 "id": corpus.id
                 , "corpus": f'{corpus.corpus[:50]} ...'
+                , "public": corpus.public
                 , "created_at": corpus.created_at
             })
     except sqlalchemy.exc.OperationalError as err:
         return None, f'{err_msg} {err}'
     except sqlalchemy.exc.IntegrityError as err:
-        return None,f'{err_msg} {err}'
+        return None, f'{err_msg} {err}'
     except:
         return None, 'unknown error view all corpus'
 
@@ -90,3 +96,17 @@ def Find_corpus_by_custom_filter(**filters):
         return curr_corpus, None
     except:
         return None, "error find corpus by id"
+
+
+def Update_current_corpus(current_corpus):
+    err_msg = f'error update current corpus:'
+
+    try:
+        current_corpus.verified = True
+        db.session.commit()
+    except sqlalchemy.exc.OperationalError as err:
+        return f'{err_msg} {err}'
+    except sqlalchemy.exc.IntegrityError as err:
+        return f'{err_msg} {err}'
+
+    return None

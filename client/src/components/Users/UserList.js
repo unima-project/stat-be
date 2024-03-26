@@ -44,6 +44,8 @@ export const UserList = (props) => {
         , {id: 'action', label: '', minWidth: 20}
     ];
 
+    const header = [{id:1, columns: columns}];
+
     React.useEffect(() => {
         if (props.userList) setRowData();
     }, [props.userList])
@@ -134,7 +136,6 @@ export const UserList = (props) => {
                         statusOnChange(event, user);
                     }}
                 />
-
                 , action: <Stack direction="row" spacing={1}>
                     <Button
                         disabled={props.userId === user.id}
@@ -183,23 +184,29 @@ export const UserList = (props) => {
         <TableContainer sx={{maxHeight: 440}}>
             <Table stickyHeader aria-label="sticky table">
                 <TableHead>
-                    <TableRow>
-                        {columns.map((column) => (
-                            <TableCell
-                                key={column.id}
-                                align={column.align}
-                                style={{minWidth: column.minWidth, backgroundColor: "#378CE7", color: "white"}}
-                            >{column.label}
-                            </TableCell>
-                        ))}
-                    </TableRow>
+                    {
+                        header.map((row) => {
+                            return (
+                                <TableRow key={row.id}>
+                                    {row.columns.map((column) => (
+                                        <TableCell
+                                            key={column.id}
+                                            align={column.align}
+                                            style={{minWidth: column.minWidth, backgroundColor: "#378CE7", color: "white"}}
+                                        >{column.label}
+                                        </TableCell>
+                                    ))}
+                                </TableRow>
+                            )
+                        })
+                    }
                 </TableHead>
                 <TableBody>
                     {rows
                         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                         .map((row) => {
                             return (
-                                <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                <TableRow hover key={row.code}>
                                     {columns.map((column) => {
                                         const value = row[column.id];
                                         return (
