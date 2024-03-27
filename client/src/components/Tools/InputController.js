@@ -37,6 +37,7 @@ export const InputController = (props) => {
                     variant="contained"
                     onClick={props.handleReveal}
                     startIcon={<VisibilityIcon/>}
+                    sx={{minWidth: 110}}
                 >Reveal</Button>
                 <Button
                     color="info"
@@ -44,6 +45,7 @@ export const InputController = (props) => {
                     variant="contained"
                     component="label"
                     startIcon={<CloudUploadIcon/>}
+                    sx={{minWidth: 110}}
                 >Upload
                     {
                         props.fileName === "" ?
@@ -69,6 +71,7 @@ export const InputController = (props) => {
                         props.setSaveStatus(false);
                     }}
                     startIcon={<RestartAltIcon/>}
+                    sx={{minWidth: 110}}
                 >Reset</Button>
                 {
                     props.isMember ?
@@ -85,6 +88,7 @@ export const InputController = (props) => {
                                         variant="contained"
                                         onClick={handleSaveCorpus}
                                         startIcon={<SaveIcon/>}
+                                        sx={{minWidth: 110}}
                                     >Save</Button>
                                     : <></>
                             }

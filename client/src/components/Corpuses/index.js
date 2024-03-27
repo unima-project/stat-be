@@ -2,7 +2,7 @@ import React from 'react';
 import {CorpusList} from "./Corpus";
 import Box from '@mui/material/Box';
 import {DeleteCorpus, GetCorpusList, GetPublicCorpusList, UpdateCorpusPublicStatus} from "../../models";
-import {AlertNotification, alertSeverity, defaultAlertStatus} from "../commons/Alert";
+import {AlertNotification, alertSeverity} from "../commons/Alert";
 import {SetupCookies} from "../../Helpers/cookie";
 import {UserProfile} from "../../Helpers/userProfile"
 
@@ -16,18 +16,22 @@ export const Corpus = (props) => {
 
     React.useEffect(() => {
         GetCorpus();
-        const intervalGetCorpus = setInterval(() => {
-            GetCorpus();
-        }, 5000);
 
+        const interval = setupGetCorpusInterval()
         if (props.alertStatus) {
             setAlertStatus(props.alertStatus);
         }
 
         return () => {
-            clearInterval(intervalGetCorpus);
+            clearInterval(interval);
         }
     }, [cookie, isMember, props.alertStatus])
+
+    const setupGetCorpusInterval = () => {
+        return setInterval(() => {
+            GetCorpus();
+        }, 5000);
+    }
 
     const GetCorpus = () => {
         if (isMember) {
@@ -95,10 +99,6 @@ export const Corpus = (props) => {
                     , message: `${error}`
                 })
             })
-    }
-
-    const LoadCurrentPublicCorpus = () => {
-
     }
 
     return (<Box>

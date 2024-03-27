@@ -25,6 +25,7 @@ export const ModalCorpus = (props) => {
                 color="success"
                 onClick={handleClickOpen}
                 startIcon={<TextSnippetIcon/>}
+                sx={{minWidth: 110}}
             >Corpus</Button>
             <Dialog
                 onClose={handleClose}

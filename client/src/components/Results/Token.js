@@ -1,13 +1,13 @@
 import React from 'react';
 import Chip from '@mui/material/Chip';
 import Grid from '@mui/system/Unstable_Grid';
-import {RemoveDuplicateItemList} from "../../Helpers/list";
+import List from "../../Helpers/list";
 
 const Token = (props) => {
     const [wordList, setWordList] = React.useState([]);
 
     React.useEffect(() => {
-        setWordList(RemoveDuplicateItemList(props.tokens));
+        setWordList(new List(props.tokens).RemoveDuplicateItemList().list);
     }, [props.tokens, props.keyword])
 
     return (

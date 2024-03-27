@@ -11,7 +11,7 @@ import {UserProfile} from "../../Helpers/userProfile";
 import {Corpus} from "../Corpuses";
 import {GetTokenList, LoadCorpus, LoadPublicCorpus} from "../../models";
 import {SetupCookies} from "../../Helpers/cookie";
-import {RemoveDuplicateItemList} from "../../Helpers/list";
+import List from "../../Helpers/list";
 
 export const Tool = () => {
     const [tokens, setTokens] = React.useState([]);
@@ -77,9 +77,12 @@ export const Tool = () => {
             })
     }
 
-    const exportToken = (token) => {
-        const uniqueToken = RemoveDuplicateItemList(token);
-        const blob = new Blob([uniqueToken], { type: "text/plain" });
+    const exportToken = (tokens) => {
+        const uniqueToken = new List(tokens)
+            .RemoveDuplicateItemList()
+            .SetNumbering()
+
+        const blob = new Blob([uniqueToken.list], { type: "text/plain" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
 
@@ -100,7 +103,6 @@ export const Tool = () => {
 
     const getTokenList = async (text, isDownload) => {
         setLoading(true);
-
         try {
             const data = await GetTokenList(text)
             setTokens(data.data.token);

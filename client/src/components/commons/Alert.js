@@ -20,7 +20,11 @@ export const AlertNotification = (props) => {
 
     React.useEffect(() => {
         setupAlertStatus();
-        setupTimeout();
+        const timeout = setupTimeoutClearAlertStatus()
+        return () => {
+            clearTimeout(timeout);
+            setAlertStatus(defaultAlertStatus);
+        }
     }, [props.alertStatus])
 
     const setupAlertStatus = () => {
@@ -29,15 +33,10 @@ export const AlertNotification = (props) => {
         }
     }
 
-    const setupTimeout = () => {
-        const to = setTimeout(() => {
+    const setupTimeoutClearAlertStatus = () => {
+        return setTimeout(() => {
             setAlertStatus(defaultAlertStatus);
         },7000)
-
-        return () => {
-            clearTimeout(to);
-            setAlertStatus(defaultAlertStatus);
-        }
     }
 
     return (
