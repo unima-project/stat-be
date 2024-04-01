@@ -115,12 +115,11 @@ def Update_current_user(current_user):
     return None
 
 
-def Delete_current_user(current_user):
+def Delete_current_user(current_user, tx):
     err_msg = f'error delete current user:'
 
     try:
-        db.session.delete(current_user)
-        db.session.commit()
+        tx.delete(current_user)
     except sqlalchemy.exc.OperationalError as err:
         return f'{err_msg} {err}'
     except sqlalchemy.exc.IntegrityError as err:

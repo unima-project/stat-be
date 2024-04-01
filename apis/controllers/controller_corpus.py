@@ -6,6 +6,10 @@ from models.model_corpus import (
     , Find_corpus_by_custom_filter
     , Update_current_corpus
 )
+
+from models.model_user import Find_user_by_id
+from models.model_common import USER_ADMIN
+
 from apis.controllers.controller_common import Response, ERROR, SUCCESS
 from flask import request, jsonify
 
@@ -61,7 +65,22 @@ def Get_all_corpus_list(user_id):
     )
 
     try:
-        corpus_list, err = View_all_corpus(user_id=user_id)
+        corpus_list = {}
+        current_user, err = Find_user_by_id(user_id)
+        if err:
+            logging.error(err)
+            error_response['message'] = err
+            return jsonify(error_response), 400
+
+        if current_user.user_type == USER_ADMIN:
+            user_id = request.args.get('user_id')
+            if int(user_id) > 0:
+                corpus_list, err = View_all_corpus(user_id=user_id)
+            else:
+                corpus_list, err = View_all_corpus()
+        else:
+            corpus_list, err = View_all_corpus(user_id=user_id)
+
         if err:
             logging.error(err)
             error_response['message'] = err
@@ -113,11 +132,25 @@ def Delete_corpus(user_id):
     )
 
     try:
-        corpus_id = request.args.get('id')
-        current_corpus, err = Find_corpus_by_custom_filter(
-            id=corpus_id
-            , user_id=user_id
-        )
+        corpus_list = {}
+        corpus_id = int(request.args.get('id'))
+
+        current_user, err = Find_user_by_id(user_id)
+        if err:
+            logging.error(err)
+            error_response['message'] = err
+            return jsonify(error_response), 400
+
+        if current_user.user_type == USER_ADMIN:
+            current_corpus, err = Find_corpus_by_custom_filter(
+                id=corpus_id
+            )
+        else:
+            current_corpus, err = Find_corpus_by_custom_filter(
+                id=corpus_id
+                , user_id=user_id
+            )
+
         if err:
             logging.error(err)
             error_response['message'] = err
@@ -226,14 +259,30 @@ def Update_corpus_public_status(user_id):
     )
 
     try:
-        current_corpus, err = Find_corpus_by_custom_filter(
-            id=request.get_json()['id']
-            , user_id=user_id
-        )
+        current_corpus = {}
+        current_user, err = Find_user_by_id(user_id)
         if err:
             logging.error(err)
             error_response['message'] = err
             return jsonify(error_response), 400
+
+        if current_user.user_type == USER_ADMIN:
+            current_corpus, err = Find_corpus_by_custom_filter(
+                id=request.get_json()['id']
+            )
+            if err:
+                logging.error(err)
+                error_response['message'] = err
+                return jsonify(error_response), 400
+        else:
+            current_corpus, err = Find_corpus_by_custom_filter(
+                id=request.get_json()['id']
+                , user_id=user_id
+            )
+            if err:
+                logging.error(err)
+                error_response['message'] = err
+                return jsonify(error_response), 400
 
         current_corpus.public = request.get_json()['public']
         err = Update_current_corpus(current_corpus)

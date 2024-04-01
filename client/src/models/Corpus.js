@@ -98,11 +98,11 @@ export const ApiCorpus = () => {
         }
     }
 
-    const GetCorpusList = async (token) => {
+    const GetCorpusList = async (token, userId) => {
         try {
             const apiRequest = {
                 method: apiMethod.GET
-                , url: '/corpuses'
+                , url: '/corpuses?user_id=' + userId
                 , headers: {
                     Authorization: `Bearer ${token}`
                 }

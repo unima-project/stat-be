@@ -76,6 +76,21 @@ def Delete_current_corpus(current_corpus):
     return None
 
 
+def Delete_all_corpus(where, tx):
+    err_msg = f'error delete all corpus:'
+
+    print("where:", where)
+
+    try:
+        tx.query(Corpuses).filter(where).delete()
+    except sqlalchemy.exc.OperationalError as err:
+        return f'{err_msg} {err}'
+    except sqlalchemy.exc.IntegrityError as err:
+        return f'{err_msg} {err}'
+
+    return None
+
+
 def Find_corpus_by_id(corpus_id):
     try:
         curr_corpus = Corpuses.query.get(corpus_id)

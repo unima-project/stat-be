@@ -1,10 +1,22 @@
 import React from 'react';
 import {CorpusList} from "./Corpus";
 import Box from '@mui/material/Box';
-import {DeleteCorpus, GetCorpusList, GetPublicCorpusList, UpdateCorpusPublicStatus} from "../../models";
+import {
+    DeleteCorpus,
+    GetCorpusList,
+    GetPublicCorpusList, GetUserList,
+    UpdateCorpusPublicStatus,
+    userType,
+} from "../../models";
 import {AlertNotification, alertSeverity} from "../commons/Alert";
 import {SetupCookies} from "../../Helpers/cookie";
 import {UserProfile} from "../../Helpers/userProfile"
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+
+const defaultUserList = [{id: 0, name: '--- all user ---'}]
 
 export const Corpus = (props) => {
     const [corpusList, setCorpusList] = React.useState([]);
@@ -12,10 +24,14 @@ export const Corpus = (props) => {
     const [alertStatus, setAlertStatus] = React.useState({
         message: "", severity: alertSeverity.INFO
     });
-    const {isMember} = UserProfile();
+    const {isMember, isLogin, isAdmin} = UserProfile();
+    const [userLevel, setUserLevel] = React.useState(userType.USER_PUBLIC);
+    const [userList, setUserList] = React.useState(defaultUserList)
+    const [selectedUser, setSelectedUser] = React.useState(0)
 
     React.useEffect(() => {
-        GetCorpus();
+        setupUserLevel();
+        if (isAdmin) setupUserList()
 
         const interval = setupGetCorpusInterval()
         if (props.alertStatus) {
@@ -25,24 +41,52 @@ export const Corpus = (props) => {
         return () => {
             clearInterval(interval);
         }
-    }, [cookie, isMember, props.alertStatus])
+    }, [cookie, isMember, isLogin, isAdmin, userLevel, props.alertStatus, selectedUser])
+
+    const setupUserList = () => {
+        GetUserList(cookie.token)
+            .then(data => {
+                const userMemberList = data.data.filter(user => {
+                    return user.user_type === userType.USER_MEMBER.value
+                }).map(user => {
+                    return {id: user.id, name: user.name}
+                });
+
+                setUserList(defaultUserList.concat(userMemberList));
+            })
+            .catch(error => {
+                setAlertStatus({
+                    severity: alertSeverity.ERROR
+                    , message: `${error}`
+                })
+            })
+    }
+
+    const setupUserLevel = () => {
+        setUserLevel(
+            isAdmin ? userType.USER_ADMIN
+                : isMember ? userType.USER_MEMBER
+                    : userType.USER_PUBLIC
+        );
+    }
 
     const setupGetCorpusInterval = () => {
+        GetCorpus(selectedUser);
         return setInterval(() => {
-            GetCorpus();
+            GetCorpus(selectedUser);
         }, 5000);
     }
 
-    const GetCorpus = () => {
-        if (isMember) {
-            GetAllCorpus();
+    const GetCorpus = (userId) => {
+        if (isLogin) {
+            GetAllCorpus(userId);
         } else {
             GetPublicCorpus();
         }
     }
 
-    const GetAllCorpus = () => {
-        GetCorpusList(cookie.token)
+    const GetAllCorpus = (userId) => {
+        GetCorpusList(cookie.token, userId)
             .then((data) => {
                 setCorpusList(data.data);
             })
@@ -74,7 +118,7 @@ export const Corpus = (props) => {
                     severity: alertSeverity.SUCCESS
                     , message: `${data.message}`
                 })
-                GetCorpus();
+                GetCorpus(selectedUser);
             })
             .catch(error => {
                 setAlertStatus({
@@ -91,7 +135,7 @@ export const Corpus = (props) => {
                     severity: alertSeverity.SUCCESS
                     , message: `${data.message}`
                 })
-                GetCorpus();
+                GetCorpus(selectedUser);
             })
             .catch(error => {
                 setAlertStatus({
@@ -101,7 +145,31 @@ export const Corpus = (props) => {
             })
     }
 
+    const userOnChange = (event) => {
+        setSelectedUser(event.target.value);
+        GetCorpus(event.target.value);
+    }
+
+    const selectUser = <Box sx={{ maxWidth: 250, textAlign: "left", marginBottom: 3 }}>
+        <FormControl fullWidth>
+            <InputLabel>User</InputLabel>
+            <Select
+                size={"small"}
+                value={selectedUser}
+                label="User"
+                onChange={userOnChange}
+            >
+                {
+                    userList.map((user, index) => {
+                        return <MenuItem value={user.id}>{user.name}</MenuItem>
+                    })
+                }
+            </Select>
+        </FormControl>
+    </Box>
+
     return (<Box>
+        {isAdmin ? selectUser : <></>}
         <AlertNotification alertStatus={alertStatus} setAlertStatus={setAlertStatus}/>
         <CorpusList
             corpusList={corpusList}
@@ -110,7 +178,7 @@ export const Corpus = (props) => {
             handleModalClose={props.handleModalClose}
             setConfirmationConfig={props.setConfirmationConfig}
             updateCurrentCorpus={UpdateCurrentCorpus}
-            isMember={isMember}
+            userLevel={userLevel}
         />
     </Box>);
 }

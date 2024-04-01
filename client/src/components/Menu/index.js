@@ -74,7 +74,7 @@ export const MainMenu = () => {
                                 isAdmin={isAdmin}
                                 isLogin={isLogin}
                             /> :
-                            <Link to={'/auth/login'}>
+                            <Link to={'/auths/login'}>
                                 <Button
                                     sx={{my: 2, color: 'white'}}
                                     endIcon={<VpnKeyIcon/>}

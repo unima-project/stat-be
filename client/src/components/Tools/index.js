@@ -27,9 +27,6 @@ export const Tool = () => {
     const [text, setText] = React.useState("");
 
     React.useEffect(() => {
-        if (isAdmin) {
-            navigate("/users")
-        }
     }, [isAdmin, isMember, cookie])
 
     const setupKeyword = (word) => {
@@ -131,7 +128,7 @@ export const Tool = () => {
                         fontWeight: 700,
                     }}
                 >
-                    Simple Text Analysis Tool
+                    {isMember ?  "Simple Text Analysis Tool" : "Corpus List"}
                 </Typography>
                 {
                     isMember ?
@@ -160,7 +157,7 @@ export const Tool = () => {
                         </Box>
                 }
                 {
-                    tokens.length > 0 ?
+                    tokens.length > 0 && !isAdmin ?
                         <Result
                             tokens={tokens}
                             setupKeyword={setupKeyword}

@@ -11,6 +11,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import GroupIcon from '@mui/icons-material/Group';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import {Stack} from "@mui/material";
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 
 
 export const MenuList = (props) => {
@@ -64,11 +65,15 @@ export const MenuList = (props) => {
     };
 
     const handleProfile = () => {
-        navigate("/users/profile");
+        navigate("/users/profiles");
     };
 
     const handleUsers = () => {
         navigate("/users");
+    };
+
+    const handleCorpuses = () => {
+        navigate("/corpuses");
     };
 
     const memberSettings = [
@@ -89,6 +94,11 @@ export const MenuList = (props) => {
             key: "Users"
             , func: handleUsers
             , icon: <GroupIcon/>
+        },
+        {
+            key: "Corpuses"
+            , func: handleCorpuses
+            , icon: <FormatListBulletedIcon/>
         },
     ]
 
@@ -123,11 +133,8 @@ export const MenuList = (props) => {
         >
             {listMenu.map((setting) => (
                 <MenuItem key={setting.key} onClick={handleCloseUserMenu} hover>
-                    <Stack direction={"row"} spacing={2} alignItems={"center"}>
-                        {setting.icon}
-                        <Typography onClick={setting.func}>
-                            {setting.key}
-                        </Typography>
+                    <Stack direction={"row"} spacing={2} alignItems={"center"} onClick={setting.func}>
+                        {setting.icon} <Typography>{setting.key}</Typography>
                     </Stack>
                 </MenuItem>
             ))}

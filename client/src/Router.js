@@ -16,16 +16,20 @@ const routes = [
         element: <Tool />
     },
     {
-        path: '/auth/login',
+        path: '/auths/login',
         element: <Login />
     },
     {
-        path: '/users/profile',
+        path: '/users/profiles',
         element: <UserProfile />
     },
     {
         path: '/users',
         element: <User />
+    },
+    {
+        path: '/corpuses',
+        element: <Tool />
     }
 ];
 

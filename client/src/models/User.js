@@ -25,6 +25,10 @@ export const ApiUser = () => {
             label: "MEMBER"
             , value: 1
         }
+        , USER_PUBLIC: {
+            label: "PUBLIC"
+            , value: 2
+        }
     }
 
     const userStatus = {
@@ -40,7 +44,7 @@ export const ApiUser = () => {
 
     const userTypeConfig = {
         0: {
-            value:userType.USER_ADMIN.value
+            value: userType.USER_ADMIN.value
             , label: userType.USER_ADMIN.label
             , color: "secondary"
             , icon: (iconSize) => {
@@ -48,9 +52,17 @@ export const ApiUser = () => {
             }
         }
         , 1: {
-            value:userType.USER_MEMBER.value
+            value: userType.USER_MEMBER.value
             , label: userType.USER_MEMBER.label
             , color: "primary"
+            , icon: (iconSize) => {
+                return (<PersonIcon sx={{fontSize: iconSize}}/>)
+            }
+        }
+        , 2: {
+            value: userType.USER_PUBLIC.value
+            , label: userType.USER_PUBLIC.label
+            , color: "success"
             , icon: (iconSize) => {
                 return (<PersonIcon sx={{fontSize: iconSize}}/>)
             }
