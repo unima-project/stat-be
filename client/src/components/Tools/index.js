@@ -3,7 +3,7 @@ import Box from "@mui/system/Box";
 import MainController from "./MainController";
 import {Result} from "../Results";
 import Typography from "@mui/material/Typography";
-import {alertSeverity} from "../commons/Alert";
+import {alertSeverity, defaultAlertStatus} from "../commons/Alert";
 import {Loading} from "../commons/Loading";
 import {confirmationConfigDefault, ModalConfirmation} from "../commons/Confirmation";
 import {useNavigate} from "react-router-dom";
@@ -22,12 +22,12 @@ export const Tool = () => {
     const [loading, setLoading] = React.useState(false);
     const [confirmationConfig, setConfirmationConfig] = React.useState(confirmationConfigDefault);
     const navigate = useNavigate();
-    const {isAdmin, isMember} = UserProfile();
+    const {isAdmin, isMember, isLogin} = UserProfile();
     const {cookie} = SetupCookies();
     const [text, setText] = React.useState("");
 
     React.useEffect(() => {
-    }, [isAdmin, isMember, cookie])
+    }, [isAdmin, isMember, cookie, isLogin])
 
     const setupKeyword = (word) => {
         if (word === keyword) {
@@ -42,8 +42,8 @@ export const Tool = () => {
         setTokens([]);
     }
 
-    const loadCurrentAllCorpus = (corpusId, isDownload) => {
-        LoadCorpus(corpusId, cookie.token)
+    const loadCurrentAllCorpus = (corpusId, isDownload, userId) => {
+        LoadCorpus(corpusId, cookie.token, userId)
             .then(async (data) => {
                 await getTokenList(data.data.corpus, isDownload);
             })
@@ -88,11 +88,13 @@ export const Tool = () => {
         link.click();
     }
 
-    const loadCurrentCorpus = (corpusId, isDownload) => {
+    const loadCurrentCorpus = (corpusId, isDownload, userId) => {
         setLoading(true);
+        setTokens([]);
+        setAlertStatus(defaultAlertStatus)
 
-        if (isMember) {
-            loadCurrentAllCorpus(corpusId, isDownload);
+        if (isLogin) {
+            loadCurrentAllCorpus(corpusId, isDownload, userId);
         } else {
             loadCurrentPublicCorpus(corpusId, isDownload);
         }
@@ -153,11 +155,12 @@ export const Tool = () => {
                                 setConfirmationConfig={setConfirmationConfig}
                                 loadCurrentCorpus={loadCurrentCorpus}
                                 alertStatus={alertStatus}
+                                setTokens={setTokens}
                             />
                         </Box>
                 }
                 {
-                    tokens.length > 0 && !isAdmin ?
+                    tokens.length > 0 ?
                         <Result
                             tokens={tokens}
                             setupKeyword={setupKeyword}

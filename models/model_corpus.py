@@ -2,6 +2,7 @@ import sqlalchemy
 
 from app import db
 from sqlalchemy.sql import func, desc
+from models.model_user import Users
 
 
 class Corpuses(db.Model):
@@ -34,13 +35,16 @@ def Add_new_corpus(new_corpus):
     return None
 
 
-def View_all_corpus(**filters):
+def View_all_corpus(*filters):
     err_msg = f'error view all tokens:'
     corpuses = []
 
     try:
         corpus_list = (
-            Corpuses.query.filter_by(**filters)
+            Corpuses.query
+            .join(Users, Users.id == Corpuses.user_id)
+            .add_columns(Corpuses.id, Corpuses.user_id, Users.name, Corpuses.corpus, Corpuses.public, Corpuses.created_at)
+            .filter(*filters)
             .order_by(desc(Corpuses.created_at))
             .all()
         )
@@ -49,6 +53,8 @@ def View_all_corpus(**filters):
             corpuses.append({
                 "id": corpus.id
                 , "corpus": f'{corpus.corpus[:50]} ...'
+                , "user_id": corpus.user_id
+                , "user": corpus.name
                 , "public": corpus.public
                 , "created_at": corpus.created_at
             })
@@ -56,8 +62,6 @@ def View_all_corpus(**filters):
         return None, f'{err_msg} {err}'
     except sqlalchemy.exc.IntegrityError as err:
         return None, f'{err_msg} {err}'
-    except:
-        return None, 'unknown error view all corpus'
 
     return corpuses, None
 
@@ -76,13 +80,11 @@ def Delete_current_corpus(current_corpus):
     return None
 
 
-def Delete_all_corpus(where, tx):
+def Delete_all_corpus(tx, **filters):
     err_msg = f'error delete all corpus:'
 
-    print("where:", where)
-
     try:
-        tx.query(Corpuses).filter(where).delete()
+        tx.query(Corpuses).filter(filters).delete()
     except sqlalchemy.exc.OperationalError as err:
         return f'{err_msg} {err}'
     except sqlalchemy.exc.IntegrityError as err:

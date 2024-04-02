@@ -13,57 +13,7 @@ import {Button, Stack} from "@mui/material";
 import Switch from "@mui/material/Switch";
 import {corpusPublicStatusConfig, userType, userTypeConfig} from "../../models";
 import VisibilityIcon from '@mui/icons-material/Visibility';
-
-const columnConfig = {
-    ID: {
-        id: 'id'
-        , label: 'Id'
-        , minWidth: 10
-    }
-    , CORPUS: {
-        id: 'corpus'
-        , label: 'Corpus'
-        , minWidth: 50
-    }
-    , PUBLIC: {
-        id: 'public'
-        , label: 'Public'
-        , minWidth: 10
-    }
-    , CREATED_AT: {
-        id: 'created_at'
-        , label: 'Created At'
-        , minWidth: 10
-    }
-    , ACTION: {
-        id: 'action'
-        , label: ''
-        , minWidth: 10
-    }
-}
-
-const columnPublicConfig = {
-    ID: {
-        id: 'id'
-        , label: 'Id'
-        , minWidth: 10
-    }
-    , CORPUS: {
-        id: 'corpus'
-        , label: 'Corpus'
-        , minWidth: 50
-    }
-    , CREATED_AT: {
-        id: 'created_at'
-        , label: 'Created At'
-        , minWidth: 10
-    }
-    , ACTION: {
-        id: 'action'
-        , label: ''
-        , minWidth: 10
-    }
-}
+import CorpusConfig from "./Config";
 
 const rowsPerPageOptions = [5, 10, 25, 50];
 
@@ -76,11 +26,11 @@ export const CorpusList = (props) => {
     React.useEffect(() => {
         setRowData();
         setupCurrentColumn();
-    }, [props.corpusList])
+    }, [props.corpusList, props.userLevel])
 
     const setupCurrentColumn = () => {
-        const currentColumns = props.userLevel === userType.USER_PUBLIC ? columnPublicConfig : columnConfig
-        setupColumn(currentColumns);
+        const config = new CorpusConfig(props.userLevel)
+        setupColumn(config.SetColumns().columns);
     }
 
     const setupColumn = (cols) => {
@@ -88,9 +38,9 @@ export const CorpusList = (props) => {
 
         for (const col in cols) {
             columnList.push({
-                id: columnConfig[col].id
-                , label: columnConfig[col].label
-                , minWidth: columnConfig[col].minWidth
+                id: cols[col].id
+                , label: cols[col].label
+                , minWidth: cols[col].minWidth
             })
         }
 
@@ -106,7 +56,7 @@ export const CorpusList = (props) => {
         });
     }
 
-    const handleLoadCorpus = (corpusId, isDownload) => {
+    const handleLoadCorpus = (corpusId, isDownload, userId) => {
         let content = `Are you sure want to load the corpus ?`
         if (isDownload) {
             content = `Are you sure want to download the token list ?`
@@ -116,7 +66,7 @@ export const CorpusList = (props) => {
             open: true
             , title: "Load Corpus"
             , okFunction: () => {
-                props.loadCurrentCorpus(corpusId, isDownload);
+                props.loadCurrentCorpus(corpusId, isDownload, userId);
                 if (props.isMember) {
                     props.handleModalClose();
                 }
@@ -156,37 +106,41 @@ export const CorpusList = (props) => {
         });
     }
 
-    const loadCorpusButton = (corpusId) => {
+    const loadCorpusButton = (corpusId, userId) => {
         return actionButton({
             color: "primary"
-            , action: () => handleLoadCorpus(corpusId, false)
+            , action: () => handleLoadCorpus(corpusId, false, userId)
             , icon: <VisibilityIcon/>
         })
     }
 
-    const printCorpusTokenButton = (corpusId) => {
+    const printCorpusTokenButton = (corpusId, userId) => {
         return actionButton({
             color: "success"
-            , action: () => handleLoadCorpus(corpusId, true)
+            , action: () => handleLoadCorpus(corpusId, true, userId)
             , icon: <DownloadIcon/>
         })
     }
 
-    const setupActionButtonList = (userLevel, corpusId) => {
+    const setupActionButtonList = (userLevel, corpusId, userId) => {
         switch (userLevel) {
             case userType.USER_ADMIN:
-                return [deleteCorpusButton(corpusId)];
+                return [
+                    loadCorpusButton(corpusId, userId)
+                    , printCorpusTokenButton(corpusId, userId)
+                    , deleteCorpusButton(corpusId)
+                ];
             case userType.USER_MEMBER:
                 return [
-                    loadCorpusButton(corpusId)
-                    , printCorpusTokenButton(corpusId)
+                    loadCorpusButton(corpusId, userId)
+                    , printCorpusTokenButton(corpusId, userId)
                     , deleteCorpusButton(corpusId)
-                ]
+                ];
             default:
                 return [
-                    loadCorpusButton(corpusId)
+                    loadCorpusButton(corpusId, userId)
                     , printCorpusTokenButton(corpusId)
-                ]
+                ];
         }
     }
 
@@ -194,6 +148,7 @@ export const CorpusList = (props) => {
         setRows(props.corpusList.map((corpus, index) => {
             return {
                 id: index + 1
+                , user: corpus.user
                 , corpus: corpus.corpus
                 , public: <Switch
                     checked={corpus.public}
@@ -204,7 +159,7 @@ export const CorpusList = (props) => {
                 , created_at: corpus.created_at
                 , action: <Stack direction="row" spacing={2}>
                     {
-                        setupActionButtonList(props.userLevel, corpus.id).map(button => {
+                        setupActionButtonList(props.userLevel, corpus.id, corpus.user_id).map(button => {
                             return button
                         })
                     }

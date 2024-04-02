@@ -30,11 +30,11 @@ export const ApiCorpus = () => {
     }
 
 
-    const LoadCorpus = async (corpusId, token) => {
+    const LoadCorpus = async (corpusId, token, userId) => {
         try {
             const apiRequest = {
                 method: apiMethod.GET
-                , url: '/corpuses/' + corpusId
+                , url: `/corpuses/${corpusId}?user_id=${userId}`
                 , headers: {
                     Authorization: `Bearer ${token}`
                 }

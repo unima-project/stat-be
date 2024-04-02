@@ -8,7 +8,7 @@ import {
     UpdateCorpusPublicStatus,
     userType,
 } from "../../models";
-import {AlertNotification, alertSeverity} from "../commons/Alert";
+import {AlertNotification, alertSeverity, defaultAlertStatus} from "../commons/Alert";
 import {SetupCookies} from "../../Helpers/cookie";
 import {UserProfile} from "../../Helpers/userProfile"
 import MenuItem from "@mui/material/MenuItem";
@@ -78,6 +78,8 @@ export const Corpus = (props) => {
     }
 
     const GetCorpus = (userId) => {
+        setAlertStatus(defaultAlertStatus);
+
         if (isLogin) {
             GetAllCorpus(userId);
         } else {
@@ -146,6 +148,7 @@ export const Corpus = (props) => {
     }
 
     const userOnChange = (event) => {
+        props.setTokens([]);
         setSelectedUser(event.target.value);
         GetCorpus(event.target.value);
     }

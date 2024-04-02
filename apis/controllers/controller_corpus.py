@@ -5,6 +5,7 @@ from models.model_corpus import (
     , Delete_current_corpus
     , Find_corpus_by_custom_filter
     , Update_current_corpus
+    , Corpuses
 )
 
 from models.model_user import Find_user_by_id
@@ -75,11 +76,11 @@ def Get_all_corpus_list(user_id):
         if current_user.user_type == USER_ADMIN:
             user_id = request.args.get('user_id')
             if int(user_id) > 0:
-                corpus_list, err = View_all_corpus(user_id=user_id)
+                corpus_list, err = View_all_corpus(Corpuses.user_id == user_id)
             else:
                 corpus_list, err = View_all_corpus()
         else:
-            corpus_list, err = View_all_corpus(user_id=user_id)
+            corpus_list, err = View_all_corpus(Corpuses.user_id == user_id)
 
         if err:
             logging.error(err)
@@ -88,7 +89,9 @@ def Get_all_corpus_list(user_id):
 
         success_response['data'] = corpus_list
         return success_response, 200
-    except:
+    except TypeError as err:
+        logging.error(err)
+        error_response['message'] = err
         return jsonify(error_response), 400
 
 
@@ -106,7 +109,7 @@ def Get_all_public_corpus_list():
     )
 
     try:
-        corpus_list, err = View_all_corpus(public=1)
+        corpus_list, err = View_all_corpus(Corpuses.public == 1)
         if err:
             logging.error(err)
             error_response['message'] = err
@@ -114,7 +117,9 @@ def Get_all_public_corpus_list():
 
         success_response['data'] = corpus_list
         return success_response, 200
-    except:
+    except TypeError as err:
+        logging.error(err)
+        error_response['message'] = err
         return jsonify(error_response), 400
 
 
@@ -193,6 +198,15 @@ def Load_current_corpus(user_id, corpus_id):
     )
 
     try:
+        current_user, err = Find_user_by_id(user_id)
+        if err:
+            logging.error(err)
+            error_response['message'] = err
+            return jsonify(error_response), 400
+
+        if current_user.user_type == USER_ADMIN:
+            user_id = int(request.args.get('user_id'))
+
         current_corpus, err = Find_corpus_by_custom_filter(
             id=corpus_id
             , user_id=user_id
