@@ -26,7 +26,7 @@ export const CorpusList = (props) => {
     React.useEffect(() => {
         setRowData();
         setupCurrentColumn();
-    }, [props.corpusList, props.userLevel])
+    }, [props.corpusList, props.userLevel, columns])
 
     const setupCurrentColumn = () => {
         const config = new CorpusConfig(props.userLevel)
@@ -41,10 +41,17 @@ export const CorpusList = (props) => {
                 id: cols[col].id
                 , label: cols[col].label
                 , minWidth: cols[col].minWidth
+                , visible: cols[col].visible
             })
         }
 
-        setColumns(columnList);
+        setupVisibleColumns(columnList);
+    }
+
+    const setupVisibleColumns = (columnList) => {
+        setColumns(columnList.filter((column) => {
+            return column.visible === true
+        }))
     }
 
     const handleDeleteCorpus = (corpusId) => {
@@ -183,15 +190,15 @@ export const CorpusList = (props) => {
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         <TableRow>
-                            {columns.map((column) => (
-                                <TableCell
-                                    key={column.id}
-                                    align={column.align}
-                                    style={{minWidth: column.minWidth, backgroundColor: "#378CE7", color: "white"}}
-                                >
-                                    {column.label}
-                                </TableCell>
-                            ))}
+                            {columns.map((column) => {
+                                return (
+                                    <TableCell
+                                        key={column.id}
+                                        align={column.align}
+                                        style={{minWidth: column.minWidth, backgroundColor: "#378CE7", color: "white"}}
+                                    >{column.label}</TableCell>
+                                );
+                            })}
                         </TableRow>
                     </TableHead>
                     <TableBody>

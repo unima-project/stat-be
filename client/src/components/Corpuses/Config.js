@@ -7,31 +7,37 @@ const columnsConfig = {
         id: 'id'
         , label: 'Id'
         , minWidth: 10
+        , visible: true
     }
     , USER: {
         id: 'user'
         , label: 'User'
         , minWidth: 50
+        , visible: true
     }
     , CORPUS: {
         id: 'corpus'
         , label: 'Corpus'
         , minWidth: 50
+        , visible: true
     }
     , PUBLIC: {
         id: 'public'
         , label: 'Public'
         , minWidth: 10
+        , visible: true
     }
     , CREATED_AT: {
         id: 'created_at'
         , label: 'Created At'
         , minWidth: 10
+        , visible: true
     }
     , ACTION: {
         id: 'action'
         , label: ''
         , minWidth: 10
+        , visible: true
     }
 }
 
@@ -42,49 +48,26 @@ export default class CorpusConfig {
     }
 
     columnsAdminConfig = () => {
+        columnsConfig.USER.visible = true
+        columnsConfig.PUBLIC.visible = true
+
         this.columns = columnsConfig;
         return this
     }
 
     columnsMemberConfig = () => {
-        let columns = {};
+        columnsConfig.USER.visible = false
+        columnsConfig.PUBLIC.visible = true
 
-        for (const col in columnsConfig) {
-            const currentCol = columnsConfig[col]
-            if (currentCol.id === 'user') {
-                continue
-            }
-
-            columns[col] = {
-                id: currentCol.id
-                , label: currentCol.label
-                , minWidth: currentCol.minWidth
-            };
-        }
-
-
-        this.columns = columns;
+        this.columns = columnsConfig;
         return this
     }
 
     columnsPublicConfig = () => {
-        let columns = {};
+        columnsConfig.USER.visible = false
+        columnsConfig.PUBLIC.visible = false
 
-        for (const col in columnsConfig) {
-            const currentCol = columnsConfig[col]
-            if (currentCol.id === 'user' || currentCol.id === 'public') {
-                continue
-            }
-
-            columns[col] = {
-                id: currentCol.id
-                , label: currentCol.label
-                , minWidth: currentCol.minWidth
-            };
-        }
-
-
-        this.columns = columns;
+        this.columns = columnsConfig;
         return this
     }
 
