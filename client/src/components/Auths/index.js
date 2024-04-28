@@ -6,7 +6,8 @@ import {useNavigate} from "react-router-dom";
 import {LoginForm} from "./Login";
 import {alertSeverity} from "../commons/Alert";
 import {SetupCookies} from "../../Helpers/cookie";
-import {CommonContext} from "../../App";
+import Grid from '@mui/material/Grid';
+import {UserProfile} from "../../Helpers/userProfile";
 
 export const Login = (props) => {
     const navigate = useNavigate();
@@ -17,7 +18,6 @@ export const Login = (props) => {
         message: "", severity: alertSeverity.INFO
     });
     const {cookieUserToken, setCookie} = SetupCookies();
-    const {setLoading} = React.useContext(CommonContext);
 
 
     React.useEffect(() => {
@@ -33,7 +33,6 @@ export const Login = (props) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        setLoading(true);
         AuthLogin(auth)
             .then(data => {
                 const date = new Date();
@@ -58,9 +57,6 @@ export const Login = (props) => {
                     severity: alertSeverity.ERROR
                     , message: `${error}`
                 })
-            })
-            .finally(() => {
-                setLoading(false);
             })
     }
 

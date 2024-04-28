@@ -3,14 +3,15 @@ import Box from "@mui/system/Box";
 import MainController from "./MainController";
 import {Result} from "../Results";
 import Typography from "@mui/material/Typography";
-import {alertSeverity, defaultAlertStatus} from "../commons/Alert";
+import {alertSeverity} from "../commons/Alert";
+import {Loading} from "../commons/Loading";
 import {confirmationConfigDefault, ModalConfirmation} from "../commons/Confirmation";
+import {useNavigate} from "react-router-dom";
 import {UserProfile} from "../../Helpers/userProfile";
 import {Corpus} from "../Corpuses";
 import {GetTokenList, LoadCorpus, LoadPublicCorpus} from "../../models";
 import {SetupCookies} from "../../Helpers/cookie";
 import List from "../../Helpers/list";
-import {CommonContext} from "../../App";
 
 export const Tool = () => {
     const [tokens, setTokens] = React.useState([]);
@@ -18,14 +19,15 @@ export const Tool = () => {
         message: "", severity: alertSeverity.INFO
     });
     const [keyword, setKeyword] = React.useState("");
+    const [loading, setLoading] = React.useState(false);
     const [confirmationConfig, setConfirmationConfig] = React.useState(confirmationConfigDefault);
-    const {isAdmin, isMember, isLogin} = UserProfile();
+    const navigate = useNavigate();
+    const {isAdmin, isMember} = UserProfile();
     const {cookie} = SetupCookies();
     const [text, setText] = React.useState("");
-    const {setLoading} = React.useContext(CommonContext);
 
     React.useEffect(() => {
-    }, [isAdmin, isMember, cookie, isLogin])
+    }, [isAdmin, isMember, cookie])
 
     const setupKeyword = (word) => {
         if (word === keyword) {
@@ -40,8 +42,8 @@ export const Tool = () => {
         setTokens([]);
     }
 
-    const loadCurrentAllCorpus = (corpusId, isDownload, userId) => {
-        LoadCorpus(corpusId, cookie.token, userId)
+    const loadCurrentAllCorpus = (corpusId, isDownload) => {
+        LoadCorpus(corpusId, cookie.token)
             .then(async (data) => {
                 await getTokenList(data.data.corpus, isDownload);
             })
@@ -86,13 +88,11 @@ export const Tool = () => {
         link.click();
     }
 
-    const loadCurrentCorpus = (corpusId, isDownload, userId) => {
+    const loadCurrentCorpus = (corpusId, isDownload) => {
         setLoading(true);
-        setTokens([]);
-        setAlertStatus(defaultAlertStatus)
 
-        if (isLogin) {
-            loadCurrentAllCorpus(corpusId, isDownload, userId);
+        if (isMember) {
+            loadCurrentAllCorpus(corpusId, isDownload);
         } else {
             loadCurrentPublicCorpus(corpusId, isDownload);
         }
@@ -117,6 +117,7 @@ export const Tool = () => {
 
     return (
         <>
+            <Loading open={loading}/>
             <ModalConfirmation confirmationConfig={confirmationConfig}/>
             <Box sx={{marginTop: 10, textAlign: 'center'}}>
                 <Typography
@@ -127,7 +128,7 @@ export const Tool = () => {
                         fontWeight: 700,
                     }}
                 >
-                    {isMember ?  "Simple Text Analysis Tool" : "Corpus List"}
+                    {isMember ?  "Analisis Korpus Bahasa Daerah Simalungun" : "Corpus List"}
                 </Typography>
                 {
                     isMember ?
@@ -152,12 +153,11 @@ export const Tool = () => {
                                 setConfirmationConfig={setConfirmationConfig}
                                 loadCurrentCorpus={loadCurrentCorpus}
                                 alertStatus={alertStatus}
-                                setTokens={setTokens}
                             />
                         </Box>
                 }
                 {
-                    tokens.length > 0 ?
+                    tokens.length > 0 && !isAdmin ?
                         <Result
                             tokens={tokens}
                             setupKeyword={setupKeyword}

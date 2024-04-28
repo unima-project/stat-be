@@ -1,4 +1,3 @@
-service: stat-app
 runtime: python
 env: flex
 entrypoint: gunicorn -b :8080 app:app

@@ -57,8 +57,8 @@ const MainController = (props) => {
         props.setText(event.target.value)
     }
 
-    const loadCurrentCorpus = (corpus_id, isDownload, userId) => {
-        props.loadCurrentCorpus(corpus_id, isDownload, userId);
+    const loadCurrentCorpus = (corpus_id, isDownload) => {
+        props.loadCurrentCorpus(corpus_id, isDownload);
         setSaveStatus(false);
     }
 

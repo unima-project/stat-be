@@ -1,4 +1,7 @@
 import {apiMethod, HitApi} from "./index";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import PersonIcon from "@mui/icons-material/Person";
+import * as React from "react";
 
 
 export const ApiCorpus = () => {
@@ -27,11 +30,11 @@ export const ApiCorpus = () => {
     }
 
 
-    const LoadCorpus = async (corpusId, token, userId) => {
+    const LoadCorpus = async (corpusId, token) => {
         try {
             const apiRequest = {
                 method: apiMethod.GET
-                , url: `/corpuses/${corpusId}?user_id=${userId}`
+                , url: '/corpuses/' + corpusId
                 , headers: {
                     Authorization: `Bearer ${token}`
                 }
