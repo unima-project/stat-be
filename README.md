@@ -55,7 +55,7 @@ default `name`, `pass` & `email` according to env config <br />
 ```
 
 ### additional requirements
-- for ubuntu os, required to install addtional libraries as below before `pip requirements`   
+- for ubuntu os, addtional libraries required before `pip requirements`   
 ```commandline
-> sudo apt-get install python3-dev default-libmysqlclient-dev build-essential
+> sudo apt-get install python3-dev default-libmysqlclient-dev build-essential pkg-config
 ```
