@@ -21,7 +21,7 @@ run:
 .PHONY: run-be
 run-be:
 	@echo "> run be"
-	@python -m flask --app app run
+	@python3 -m flask --app app run --host=0.0.0.0 --port=9000
 
 .PHONY: run-fe
 run-fe:
@@ -31,4 +31,4 @@ run-fe:
 .PHONY: create-admin
 create-admin:
 	@echo "> register admin"
-	@cd models; python -m model_admin
+	@cd models; python3 -m model_admin
