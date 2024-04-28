@@ -2,20 +2,20 @@ import React from 'react';
 import Box from "@mui/material/Box";
 import {SetupCookies} from '../../Helpers/cookie';
 import {GetUserProfile} from "../../models";
-import {Loading} from "../commons/Loading";
 import {AlertNotification, alertSeverity, defaultAlertStatus} from "../commons/Alert";
 import {UserProfileController} from "./UserProfileController";
 import {defaultUserData} from '../../models';
 import {useNavigate} from 'react-router';
 import {confirmationConfigDefault, ModalConfirmation} from "../commons/Confirmation";
+import {CommonContext} from "../../App";
 
 export const UserProfile = () => {
     const navigate = useNavigate();
     const {cookie} = SetupCookies();
     const [userProfile, setUserProfile] = React.useState(defaultUserData);
-    const [loading, setLoading] = React.useState(false);
     const [alertStatus, setAlertStatus] = React.useState(defaultAlertStatus);
     const [confirmationConfig, setConfirmationConfig] = React.useState(confirmationConfigDefault);
+    const {setLoading} = React.useContext(CommonContext);
 
     React.useEffect(() => {
         if (!cookie.token) {
@@ -45,7 +45,6 @@ export const UserProfile = () => {
 
     return (
         <Box sx={{marginTop: 15}}>
-            <Loading open={loading}/>
             <AlertNotification alertStatus={alertStatus} setAlertStatus={setAlertStatus}/>
             <ModalConfirmation confirmationConfig={confirmationConfig}/>
             <UserProfileController

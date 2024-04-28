@@ -1,7 +1,4 @@
 import {apiMethod, HitApi} from "./index";
-import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
-import PersonIcon from "@mui/icons-material/Person";
-import * as React from "react";
 
 
 export const ApiCorpus = () => {

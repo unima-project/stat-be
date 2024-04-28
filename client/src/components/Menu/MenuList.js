@@ -12,6 +12,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import {Stack} from "@mui/material";
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+import {CommonContext} from "../../App";
 
 
 export const MenuList = (props) => {
@@ -20,6 +21,7 @@ export const MenuList = (props) => {
     const [listMenu, setListMenu] = React.useState([]);
     const [userName, setUserName] = React.useState("");
     const [confirmationConfig, setConfirmationConfig] = React.useState(confirmationConfigDefault);
+    const {setLoading} = React.useContext(CommonContext);
 
     React.useEffect(() => {
         if (props.isLogin) {
@@ -39,6 +41,7 @@ export const MenuList = (props) => {
     }
 
     const logOut = () => {
+        setLoading(true);
         AuthLogout(props.cookie.token)
             .then((data) => {
                 const date = new Date();
@@ -53,6 +56,7 @@ export const MenuList = (props) => {
             })
             .finally(() => {
                 navigate("/");
+                setLoading(false);
             })
     }
 
