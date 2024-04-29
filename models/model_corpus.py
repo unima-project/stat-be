@@ -80,7 +80,7 @@ def Delete_current_corpus(current_corpus):
     return None
 
 
-def Delete_all_corpus(tx, **filters):
+def Delete_all_corpus(tx, filters):
     err_msg = f'error delete all corpus:'
 
     try:

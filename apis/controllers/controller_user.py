@@ -190,7 +190,7 @@ def Delete_user(user_id):
             return jsonify(error_response), 400
 
         tx = db.session
-        err = Delete_all_corpus(Corpuses.user_id == user_id_req, tx)
+        err = Delete_all_corpus(tx, Corpuses.user_id == user_id_req)
         if err:
             tx.rollback()
             logging.error(err)
