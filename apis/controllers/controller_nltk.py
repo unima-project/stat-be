@@ -51,7 +51,7 @@ def Get_tokens_upload():
 
         f.save(f.filename)
 
-        text = open(f.filename, "r")
+        text = open(f.filename, "r",  encoding='unicode_escape')
         joined_text = "".join(text.readlines())
         tokens = Tokenizing(joined_text)
 
