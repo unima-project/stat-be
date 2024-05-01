@@ -4,7 +4,7 @@ import {ApiAuth} from "./Auth";
 import {ApiCorpus} from "./Corpus";
 import {ApiUser} from "./User";
 
-const baseUrl = "http://35.192.107.176:9000";
+const baseUrl = "https://ankobadasi.et.r.appspot.com";
 // const baseUrl = "http://localhost:5000";
 const timeOut = 30000
 
