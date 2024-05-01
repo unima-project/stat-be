@@ -1,12 +1,12 @@
 from flask import Flask
 from flask_cors import CORS
 from dotenv import load_dotenv
-from config import Config_db
 from apis import api
 from apis import api_authentication
 from apis import api_nltk
 from apis import api_user
 from apis import api_corpus
+from config import Config_db
 
 
 def create_app():
