@@ -32,10 +32,10 @@ def Check_hash(password, pw_hash):
 
 def Generate_jwt_token(payload):
     try:
-        token = jwt.encode(payload=payload, key=secret_key)
+        token = jwt.encode(payload=payload, key="secret_key", algorithm="HS256")
         return token, None
-    except:
-        return "", "error generate jwt token"
+    except TypeError as err:
+        return "", err
 
 
 def Decode_jwt_token(jwt_token):

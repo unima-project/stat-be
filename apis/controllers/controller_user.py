@@ -1,23 +1,21 @@
 import logging
 from models.model_user import (
     Add_new_user
-, View_all_user
-, Find_user_by_id
-, Update_current_user
-, Delete_current_user
+    , View_all_user
+    , Find_user_by_id
+    , Update_current_user
+    , Delete_current_user
 
-, User_data_validation
+    , User_data_validation
 )
 from models.model_corpus import (
     Delete_all_corpus
-, Find_corpus_by_custom_filter
-, Corpuses
+    , Corpuses
 )
 from apis.controllers.controller_common import Response, ERROR, SUCCESS
 from flask import request, jsonify
 from utils.util_security import Generate_random_password, Check_hash, Generate_hash
 from utils.util_validation import Validate_email
-from app import db
 
 
 def Create_new_user(user_id):
