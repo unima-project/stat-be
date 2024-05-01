@@ -4,8 +4,8 @@ import {ApiAuth} from "./Auth";
 import {ApiCorpus} from "./Corpus";
 import {ApiUser} from "./User";
 
-const baseUrl = "http://35.192.107.176:9000";
-// const baseUrl = "http://127.0.0.1:5000";
+const baseUrl = "https://ankobadasi.et.r.appspot.com";
+//const baseUrl = "http://127.0.0.1:8080";
 const timeOut = 30000
 
 const axiosInstance = axios.create({

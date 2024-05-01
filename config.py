@@ -1,7 +1,4 @@
-from flask_sqlalchemy import SQLAlchemy
 from os import getenv
-
-secret_key = getenv("SECRET_KEY")
 
 
 def Config_db(app):
@@ -13,5 +10,3 @@ def Config_db(app):
 
     db_uri = f'mysql://{db_user}:{db_pass}@{db_host}/{db_name}'
     app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
-
-    return SQLAlchemy(app)

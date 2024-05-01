@@ -1,11 +1,10 @@
 import sqlalchemy.exc
 
-from app import db
 from sqlalchemy.sql import func
 from utils.util_security import Generate_hash
 from utils.util_validation import Validate_email
 from models.model_common import USER_ACTIVE, USER_MEMBER
-
+from extensions import db
 
 class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -95,8 +94,6 @@ def View_all_user():
         return None, f'{err_msg} {err}'
     except sqlalchemy.exc.IntegrityError as err:
         return None, f'{err_msg} {err}'
-    except:
-        return None, 'unknown error view all user'
 
     return users, None
 
@@ -133,10 +130,10 @@ def Find_user_by_custom_filter(**filters):
         curr_user = Users.query.filter_by(**filters).first()
         if curr_user is None:
             return None, "user not found"
+    except sqlalchemy.exc.IntegrityError as err:
+        return None, err
 
-        return curr_user, None
-    except:
-        return None, "error find user by custom filter"
+    return curr_user, None
 
 
 def Find_user_by_id(user_id):
@@ -146,5 +143,5 @@ def Find_user_by_id(user_id):
             return None, "user not found"
 
         return curr_user, None
-    except:
-        return None, "error find user by id"
+    except sqlalchemy.exc.IntegrityError as err:
+        return None, err

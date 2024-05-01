@@ -1,8 +1,10 @@
 from bcrypt import hashpw, checkpw, gensalt
-from config import secret_key
 import jwt
 import secrets
+import os
 
+secret_key = os.getenv("SECRET_KEY")
+db_user = os.getenv('DB_USER')
 
 def Generate_hash(password):
     try:
@@ -32,10 +34,10 @@ def Check_hash(password, pw_hash):
 
 def Generate_jwt_token(payload):
     try:
-        token = jwt.encode(payload=payload, key=secret_key)
+        token = jwt.encode(payload=payload, key=secret_key, algorithm="HS256")
         return token, None
-    except:
-        return "", "error generate jwt token"
+    except TypeError as err:
+        return "", err
 
 
 def Decode_jwt_token(jwt_token):
@@ -46,7 +48,7 @@ def Decode_jwt_token(jwt_token):
         return "", f"error decode jwt token: {err}"
     except jwt.exceptions.DecodeError as err:
         return "", f"error decode jwt token: {err}"
-    except:
+    except TypeError:
         return "", "error decode jwt token"
 
 

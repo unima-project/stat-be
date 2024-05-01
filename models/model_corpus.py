@@ -1,6 +1,6 @@
 import sqlalchemy
 
-from app import db
+from extensions import db
 from sqlalchemy.sql import func, desc
 from models.model_user import Users
 
@@ -43,7 +43,8 @@ def View_all_corpus(*filters):
         corpus_list = (
             Corpuses.query
             .join(Users, Users.id == Corpuses.user_id)
-            .add_columns(Corpuses.id, Corpuses.user_id, Users.name, Corpuses.corpus, Corpuses.public, Corpuses.created_at)
+            .add_columns(Corpuses.id, Corpuses.user_id, Users.name, Corpuses.corpus, Corpuses.public,
+                         Corpuses.created_at)
             .filter(*filters)
             .order_by(desc(Corpuses.created_at))
             .all()

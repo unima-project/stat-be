@@ -21,7 +21,7 @@ run:
 .PHONY: run-be
 run-be:
 	@echo "> run be"
-	@python3 -m flask --app app run --host=0.0.0.0 --port=9000
+	@python3 -m flask --app app run --host=0.0.0.0 --port=8080
 
 .PHONY: run-fe
 run-fe:
