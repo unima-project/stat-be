@@ -19,13 +19,14 @@ export const Tool = () => {
     });
     const [keyword, setKeyword] = React.useState("");
     const [confirmationConfig, setConfirmationConfig] = React.useState(confirmationConfigDefault);
-    const {isAdmin, isMember, isLogin} = UserProfile();
+    const {isMember, isLogin} = UserProfile();
     const {cookie} = SetupCookies();
     const [text, setText] = React.useState("");
     const {setLoading} = React.useContext(CommonContext);
 
-    React.useEffect(() => {
-    }, [isAdmin, isMember, cookie, isLogin])
+    const isMemberMemo = React.useMemo(() => {
+        return isMember
+    }, [isMember])
 
     const setupKeyword = (word) => {
         if (word === keyword) {
@@ -41,6 +42,7 @@ export const Tool = () => {
     }
 
     const loadCurrentAllCorpus = (corpusId, isDownload, userId) => {
+        setLoading(true);
         LoadCorpus(corpusId, cookie.token, userId)
             .then(async (data) => {
                 await getTokenList(data.data.corpus, isDownload);
@@ -57,6 +59,7 @@ export const Tool = () => {
     }
 
     const loadCurrentPublicCorpus = (corpusId, isDownload) => {
+        setLoading(true);
         LoadPublicCorpus(corpusId)
             .then(async (data) => {
                 await getTokenList(data.data.corpus, isDownload);
@@ -87,7 +90,6 @@ export const Tool = () => {
     }
 
     const loadCurrentCorpus = (corpusId, isDownload, userId) => {
-        setLoading(true);
         setTokens([]);
         setAlertStatus(defaultAlertStatus)
 
@@ -127,10 +129,10 @@ export const Tool = () => {
                         fontWeight: 700,
                     }}
                 >
-                    {isMember ?  "Simple Text Analysis Tool" : "Corpus List"}
+                    {isMemberMemo ?  "Simple Text Analysis Tool" : "Corpus List"}
                 </Typography>
                 {
-                    isMember ?
+                    isMemberMemo ?
                         <MainController
                             tokens={tokens}
                             setTokens={setTokens}
@@ -139,7 +141,7 @@ export const Tool = () => {
                             setKeyword={setKeyword}
                             setLoading={setLoading}
                             setConfirmationConfig={setConfirmationConfig}
-                            isMember={isMember}
+                            isMember={isMemberMemo}
                             cookie={cookie}
                             loadCurrentCorpus={loadCurrentCorpus}
                             text={text}

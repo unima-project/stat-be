@@ -18,6 +18,7 @@ export const UserProfile = () => {
             setIsMember(false);
         }
     }, [cookie, isAdmin, isLogin, isMember])
+
     const getUserProfile = async () => {
         try {
             const data = await GetUserProfile(cookie.token);
