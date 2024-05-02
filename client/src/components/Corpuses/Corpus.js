@@ -11,7 +11,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import DownloadIcon from '@mui/icons-material/Download';
 import {Button, Stack} from "@mui/material";
 import Switch from "@mui/material/Switch";
-import {corpusPublicStatusConfig, userType, userTypeConfig} from "../../models";
+import {corpusPublicStatusConfig, userType} from "../../models";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import CorpusConfig from "./Config";
 
@@ -26,7 +26,11 @@ export const CorpusList = (props) => {
     React.useEffect(() => {
         setRowData();
         setupCurrentColumn();
-    }, [props.corpusList, props.userLevel, columns])
+    }, [props.corpusListMemo, props.userLevel])
+
+    const columnsCallback = React.useMemo(() => {
+        return columns
+    }, [columns])
 
     const setupCurrentColumn = () => {
         const config = new CorpusConfig(props.userLevel)
@@ -102,6 +106,7 @@ export const CorpusList = (props) => {
             component="label"
             color={prop.color}
             onClick={prop.action}
+            key={prop.key}
         >{prop.icon}</Button>
     }
 
@@ -110,6 +115,7 @@ export const CorpusList = (props) => {
             color: "error"
             , action: () => handleDeleteCorpus(corpusId)
             , icon: <DeleteForeverIcon/>
+            , key: 1,
         });
     }
 
@@ -118,6 +124,7 @@ export const CorpusList = (props) => {
             color: "primary"
             , action: () => handleLoadCorpus(corpusId, false, userId)
             , icon: <VisibilityIcon/>
+            , key: 2,
         })
     }
 
@@ -126,6 +133,7 @@ export const CorpusList = (props) => {
             color: "success"
             , action: () => handleLoadCorpus(corpusId, true, userId)
             , icon: <DownloadIcon/>
+            , key: 3,
         })
     }
 
@@ -152,13 +160,14 @@ export const CorpusList = (props) => {
     }
 
     const setRowData = () => {
-        setRows(props.corpusList.map((corpus, index) => {
+        setRows(props.corpusListMemo.map((corpus, index) => {
+            const checked = corpus.public === 1
             return {
                 id: index + 1
                 , user: corpus.user
                 , corpus: corpus.corpus
                 , public: <Switch
-                    checked={corpus.public}
+                    checked={checked}
                     onChange={(event) => {
                         publicOnChange(event, corpus);
                     }}
@@ -190,7 +199,7 @@ export const CorpusList = (props) => {
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         <TableRow>
-                            {columns.map((column) => {
+                            {columnsCallback.map((column) => {
                                 return (
                                     <TableCell
                                         key={column.id}
@@ -207,7 +216,7 @@ export const CorpusList = (props) => {
                             .map((row) => {
                                 return (
                                     <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                                        {columns.map((column) => {
+                                        {columnsCallback.map((column) => {
                                             const value = row[column.id];
                                             return (
                                                 <TableCell key={column.id} align={column.align}>

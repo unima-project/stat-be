@@ -35,7 +35,7 @@ export const InputController = (props) => {
                     color="primary"
                     size="small"
                     variant="contained"
-                    onClick={props.handleReveal}
+                    onClick={() => props.handleReveal(props.text)}
                     startIcon={<VisibilityIcon/>}
                     sx={{minWidth: 110}}
                 >Reveal</Button>

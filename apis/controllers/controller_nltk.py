@@ -1,4 +1,3 @@
-from os import remove
 from nltk import tokenize, FreqDist, ngrams
 from nltk.text import ConcordanceIndex
 from nltk.collocations import BigramCollocationFinder
@@ -51,7 +50,7 @@ def Get_tokens_upload():
 
         f.save(f.filename)
 
-        text = open(f.filename, "r")
+        text = open(f.filename, "r",  encoding='unicode_escape')
         joined_text = "".join(text.readlines())
         tokens = Tokenizing(joined_text)
 
@@ -67,7 +66,6 @@ def Get_tokens_upload():
 
     try:
         f.close()
-        remove(file_name)
     except:
         print(f'failed to close/ remove file {file_name}')
 
