@@ -14,21 +14,21 @@ function App() {
 
     return (
         <CommonContext.Provider value={{loading, setLoading}}>
-        <BrowserRouter basename='/'>
-            <Loading open={loading}/>
-            <MainMenu/>
-            <Container>
-                <Routes>
-                {routes.map((route) => (
-                    <Route
-                        key={route.path}
-                        path={route.path}
-                        element={route.element}
-                    />
-                ))}
-                </Routes>
-            </Container>
-        </BrowserRouter>
+            <BrowserRouter basename='/'>
+                <Loading open={loading}/>
+                <MainMenu/>
+                <Container>
+                    <Routes>
+                        {routes.map((route) => (
+                            <Route
+                                key={route.path}
+                                path={route.path}
+                                element={route.element}
+                            />
+                        ))}
+                    </Routes>
+                </Container>
+            </BrowserRouter>
         </CommonContext.Provider>
     );
 }

@@ -31,7 +31,7 @@ export const MainMenu = () => {
             <Button
                 sx={{my: 2, color: 'white'}}
                 startIcon={<QueryStatsIcon/>}
-            >Tool</Button>
+            >Analisis Korpus</Button>
         </Link>
     </>
 
@@ -61,7 +61,7 @@ export const MainMenu = () => {
                             textDecoration: 'none',
                         }}
                     >
-                        STAT
+                        ANKOBADASI
                     </Typography>
                     <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
                         {setupHomeMenu()}
