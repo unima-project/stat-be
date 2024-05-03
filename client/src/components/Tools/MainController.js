@@ -1,6 +1,5 @@
 import React from 'react';
 import Box from "@mui/system/Box";
-import {GetTokenListUpload} from "../../models";
 import {SaveCorpus} from "../../models";
 import {AlertNotification} from "../commons/Alert";
 import {InputController} from "./InputController";
@@ -38,13 +37,14 @@ const MainController = (props) => {
             })
     }
 
-    const handleReveal = () => {
+    const handleReveal = (text) => {
+        props.setLoading(true);
         props.setAlertStatus({
             severity: alertSeverity.INFO
             , message: ""
         })
 
-        props.getTokenList(props.text)
+        props.getTokenList(text)
             .then(() => {
                 setSaveStatus(true);
             })
@@ -57,17 +57,17 @@ const MainController = (props) => {
         props.setText(event.target.value)
     }
 
-    const loadCurrentCorpus = (corpus_id, isDownload) => {
-        props.loadCurrentCorpus(corpus_id, isDownload);
+    const loadCurrentCorpus = (corpus_id, isDownload, userId) => {
+        props.loadCurrentCorpus(corpus_id, isDownload, userId);
         setSaveStatus(false);
     }
 
     const handleUpload = (event) => {
+        props.setLoading(true);
         props.setAlertStatus({
             severity: alertSeverity.INFO
             , message: ""
         })
-        props.setLoading(true);
 
         if (event.target.files.length <= 0) {
             return
@@ -75,28 +75,20 @@ const MainController = (props) => {
 
         setFileName(event.target.files[0].name)
 
-        const formData = new FormData();
-        formData.set(
-            "text",
-            event.target.files[0],
-            event.target.files[0].name);
+        const file = event.target.files[0];
+        const textType = /text.*/;
 
-        GetTokenListUpload(formData)
-            .then(data => {
-                props.setTokens(data.data.token);
-                props.setText(data.data.corpus);
-                setSaveStatus(true);
-            })
-            .catch(error => {
-                props.setAlertStatus({
-                    severity: alertSeverity.ERROR
-                    , message: `handle upload: ${error}`
-                })
-               props.errorState();
-            })
-            .finally(() => {
-                resetState();
-            })
+        if (file.type.match(textType)) {
+            const reader = new FileReader();
+
+            reader.onload = () => {
+                const content = reader.result;
+                props.setText(content);
+                handleReveal(content);
+            }
+
+            reader.readAsText(file);
+        }
     };
 
     return (

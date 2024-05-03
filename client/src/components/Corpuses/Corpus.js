@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -11,59 +12,9 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import DownloadIcon from '@mui/icons-material/Download';
 import {Button, Stack} from "@mui/material";
 import Switch from "@mui/material/Switch";
-import {corpusPublicStatusConfig, userType, userTypeConfig} from "../../models";
+import {corpusPublicStatusConfig, userType} from "../../models";
 import VisibilityIcon from '@mui/icons-material/Visibility';
-
-const columnConfig = {
-    ID: {
-        id: 'id'
-        , label: 'Id'
-        , minWidth: 10
-    }
-    , CORPUS: {
-        id: 'corpus'
-        , label: 'Corpus'
-        , minWidth: 50
-    }
-    , PUBLIC: {
-        id: 'public'
-        , label: 'Public'
-        , minWidth: 10
-    }
-    , CREATED_AT: {
-        id: 'created_at'
-        , label: 'Created At'
-        , minWidth: 10
-    }
-    , ACTION: {
-        id: 'action'
-        , label: ''
-        , minWidth: 10
-    }
-}
-
-const columnPublicConfig = {
-    ID: {
-        id: 'id'
-        , label: 'Id'
-        , minWidth: 10
-    }
-    , CORPUS: {
-        id: 'corpus'
-        , label: 'Corpus'
-        , minWidth: 50
-    }
-    , CREATED_AT: {
-        id: 'created_at'
-        , label: 'Created At'
-        , minWidth: 10
-    }
-    , ACTION: {
-        id: 'action'
-        , label: ''
-        , minWidth: 10
-    }
-}
+import CorpusConfig from "./Config";
 
 const rowsPerPageOptions = [5, 10, 25, 50];
 
@@ -76,11 +27,15 @@ export const CorpusList = (props) => {
     React.useEffect(() => {
         setRowData();
         setupCurrentColumn();
-    }, [props.corpusList])
+    }, [props.corpusListMemo, props.userLevel])
+
+    const columnsCallback = React.useMemo(() => {
+        return columns
+    }, [columns])
 
     const setupCurrentColumn = () => {
-        const currentColumns = props.userLevel === userType.USER_PUBLIC ? columnPublicConfig : columnConfig
-        setupColumn(currentColumns);
+        const config = new CorpusConfig(props.userLevel)
+        setupColumn(config.SetColumns().columns);
     }
 
     const setupColumn = (cols) => {
@@ -88,13 +43,20 @@ export const CorpusList = (props) => {
 
         for (const col in cols) {
             columnList.push({
-                id: columnConfig[col].id
-                , label: columnConfig[col].label
-                , minWidth: columnConfig[col].minWidth
+                id: cols[col].id
+                , label: cols[col].label
+                , minWidth: cols[col].minWidth
+                , visible: cols[col].visible
             })
         }
 
-        setColumns(columnList);
+        setupVisibleColumns(columnList);
+    }
+
+    const setupVisibleColumns = (columnList) => {
+        setColumns(columnList.filter((column) => {
+            return column.visible === true
+        }))
     }
 
     const handleDeleteCorpus = (corpusId) => {
@@ -106,7 +68,7 @@ export const CorpusList = (props) => {
         });
     }
 
-    const handleLoadCorpus = (corpusId, isDownload) => {
+    const handleLoadCorpus = (corpusId, isDownload, userId) => {
         let content = `Are you sure want to load the corpus ?`
         if (isDownload) {
             content = `Are you sure want to download the token list ?`
@@ -116,7 +78,7 @@ export const CorpusList = (props) => {
             open: true
             , title: "Load Corpus"
             , okFunction: () => {
-                props.loadCurrentCorpus(corpusId, isDownload);
+                props.loadCurrentCorpus(corpusId, isDownload, userId);
                 if (props.isMember) {
                     props.handleModalClose();
                 }
@@ -145,6 +107,7 @@ export const CorpusList = (props) => {
             component="label"
             color={prop.color}
             onClick={prop.action}
+            key={prop.key}
         >{prop.icon}</Button>
     }
 
@@ -153,50 +116,59 @@ export const CorpusList = (props) => {
             color: "error"
             , action: () => handleDeleteCorpus(corpusId)
             , icon: <DeleteForeverIcon/>
+            , key: 1,
         });
     }
 
-    const loadCorpusButton = (corpusId) => {
+    const loadCorpusButton = (corpusId, userId) => {
         return actionButton({
             color: "primary"
-            , action: () => handleLoadCorpus(corpusId, false)
+            , action: () => handleLoadCorpus(corpusId, false, userId)
             , icon: <VisibilityIcon/>
+            , key: 2,
         })
     }
 
-    const printCorpusTokenButton = (corpusId) => {
+    const printCorpusTokenButton = (corpusId, userId) => {
         return actionButton({
             color: "success"
-            , action: () => handleLoadCorpus(corpusId, true)
+            , action: () => handleLoadCorpus(corpusId, true, userId)
             , icon: <DownloadIcon/>
+            , key: 3,
         })
     }
 
-    const setupActionButtonList = (userLevel, corpusId) => {
+    const setupActionButtonList = (userLevel, corpusId, userId) => {
         switch (userLevel) {
             case userType.USER_ADMIN:
-                return [deleteCorpusButton(corpusId)];
+                return [
+                    loadCorpusButton(corpusId, userId)
+                    , printCorpusTokenButton(corpusId, userId)
+                    , deleteCorpusButton(corpusId)
+                ];
             case userType.USER_MEMBER:
                 return [
-                    loadCorpusButton(corpusId)
-                    , printCorpusTokenButton(corpusId)
+                    loadCorpusButton(corpusId, userId)
+                    , printCorpusTokenButton(corpusId, userId)
                     , deleteCorpusButton(corpusId)
-                ]
+                ];
             default:
                 return [
-                    loadCorpusButton(corpusId)
+                    loadCorpusButton(corpusId, userId)
                     , printCorpusTokenButton(corpusId)
-                ]
+                ];
         }
     }
 
     const setRowData = () => {
-        setRows(props.corpusList.map((corpus, index) => {
+        setRows(props.corpusListMemo.map((corpus, index) => {
+            const checked = corpus.public === 1
             return {
                 id: index + 1
+                , user: corpus.user
                 , corpus: corpus.corpus
                 , public: <Switch
-                    checked={corpus.public}
+                    checked={checked}
                     onChange={(event) => {
                         publicOnChange(event, corpus);
                     }}
@@ -204,7 +176,7 @@ export const CorpusList = (props) => {
                 , created_at: corpus.created_at
                 , action: <Stack direction="row" spacing={2}>
                     {
-                        setupActionButtonList(props.userLevel, corpus.id).map(button => {
+                        setupActionButtonList(props.userLevel, corpus.id, corpus.user_id).map(button => {
                             return button
                         })
                     }
@@ -228,15 +200,15 @@ export const CorpusList = (props) => {
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         <TableRow>
-                            {columns.map((column) => (
-                                <TableCell
-                                    key={column.id}
-                                    align={column.align}
-                                    style={{minWidth: column.minWidth, backgroundColor: "#378CE7", color: "white"}}
-                                >
-                                    {column.label}
-                                </TableCell>
-                            ))}
+                            {columnsCallback.map((column) => {
+                                return (
+                                    <TableCell
+                                        key={column.id}
+                                        align={column.align}
+                                        style={{minWidth: column.minWidth, backgroundColor: "#378CE7", color: "white"}}
+                                    >{column.label}</TableCell>
+                                );
+                            })}
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -245,7 +217,7 @@ export const CorpusList = (props) => {
                             .map((row) => {
                                 return (
                                     <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                                        {columns.map((column) => {
+                                        {columnsCallback.map((column) => {
                                             const value = row[column.id];
                                             return (
                                                 <TableCell key={column.id} align={column.align}>

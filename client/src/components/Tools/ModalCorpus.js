@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -7,9 +8,11 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import {Corpus} from '../Corpuses';
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
+import {CommonContext} from "../../App";
 
 export const ModalCorpus = (props) => {
     const [open, setOpen] = React.useState(false);
+    const {setLoading} = React.useContext(CommonContext);
 
     const handleClickOpen = () => {
         setOpen(true);
