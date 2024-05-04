@@ -16,6 +16,7 @@ from apis.controllers.controller_common import Response, ERROR, SUCCESS
 from flask import request, jsonify
 from utils.util_security import Generate_random_password, Check_hash, Generate_hash
 from utils.util_validation import Validate_email
+from extensions import db
 
 
 def Create_new_user(user_id):
