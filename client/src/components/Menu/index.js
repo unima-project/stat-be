@@ -25,13 +25,13 @@ export const MainMenu = () => {
             <Button
                 sx={{my: 2, color: 'white'}}
                 startIcon={<HomeIcon/>}
-            >Home</Button>
+            >About</Button>
         </Link>
         <Link to={'/tools'}>
             <Button
                 sx={{my: 2, color: 'white'}}
                 startIcon={<QueryStatsIcon/>}
-            >Tool</Button>
+            >Korpus Tonsea</Button>
         </Link>
     </>
 
@@ -61,7 +61,7 @@ export const MainMenu = () => {
                             textDecoration: 'none',
                         }}
                     >
-                        STAT
+                        Ankorsea
                     </Typography>
                     <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
                         {setupHomeMenu()}

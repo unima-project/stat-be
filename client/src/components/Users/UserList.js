@@ -119,7 +119,6 @@ export const UserList = (props) => {
 
     const setRowData = () => {
         setRows(setRowDataOrder().map((user, index) => {
-            const checked = user.status === 1
             return {
                 no: index + 1
                 , user_type: userTypeControl(user)
@@ -132,7 +131,7 @@ export const UserList = (props) => {
                 , reason: `${user.reason.substring(0, 10)} ...`
                 , status: <Switch
                     disabled={props.userId === user.id}
-                    checked={checked}
+                    checked={user.status}
                     onChange={(event) => {
                         statusOnChange(event, user);
                     }}

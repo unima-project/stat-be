@@ -1,6 +1,6 @@
 body {
     font-family: Arial, serif;
-    color: #1f6dc1;
+    color: #001020;
 }
 
 textarea {
@@ -8,7 +8,7 @@ textarea {
     width: 98%;
     padding: 1%;
     resize: none;
-    border: #1f6dc1 .1rem solid;
+    border: #630000 .1rem solid;
     border-radius: 5px;
 }
 
