@@ -7,6 +7,7 @@ from apis import api_nltk
 from apis import api_user
 from apis import api_corpus
 from config import Config_db
+from models.model import initDB
 
 
 def create_app():
@@ -22,7 +23,7 @@ def create_app():
     cors = CORS()
     cors.init_app(app)
 
-    import models
+    initDB(app, db)
 
     # register router
     app.register_blueprint(api.mainRouter)

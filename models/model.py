@@ -1,5 +1,6 @@
-from main import app
-from extensions import db
+import models.model_user
+import models.model_corpus
 
-with app.app_context():
-    db.create_all()
+def initDB(app, db):
+    with app.app_context():
+        db.create_all()
