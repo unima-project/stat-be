@@ -4,8 +4,9 @@ import {ApiAuth} from "./Auth";
 import {ApiCorpus} from "./Corpus";
 import {ApiUser} from "./User";
 
-const baseUrl = "https://ankobadasi.et.r.appspot.com";
-// const baseUrl = "http://localhost:5000";
+const baseUrl = "https://ankobadasi-backup.as.r.appspot.com";
+//const baseUrl = "https://ankobadasi.et.r.appspot.com";
+// const baseUrl = "http://localhost:8080";
 const timeOut = 30000
 
 const axiosInstance = axios.create({
