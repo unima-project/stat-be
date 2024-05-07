@@ -4,7 +4,8 @@ import {ApiAuth} from "./Auth";
 import {ApiCorpus} from "./Corpus";
 import {ApiUser} from "./User";
 
-const baseUrl = "https://ankorsea.as.r.appspot.com/";
+const baseUrl = "https://ankorsea-backup.as.r.appspot.com";
+// const baseUrl = "https://ankorsea.as.r.appspot.com/";
 // const baseUrl = "http://127.0.0.1:8080";
 const timeOut = 30000
 
