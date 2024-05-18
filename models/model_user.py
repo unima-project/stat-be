@@ -6,6 +6,7 @@ from utils.util_validation import Validate_email
 from models.model_common import USER_ACTIVE, USER_MEMBER
 from extensions import db
 
+
 class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_type = db.Column(db.Integer, nullable=False, default=USER_MEMBER)

@@ -16,6 +16,7 @@ def Get_tokens():
     try:
         text = request.get_json()['text']
         tokens = Tokenizing(text)
+
         response['data'] = {
             "token": tokens
             , "corpus": text

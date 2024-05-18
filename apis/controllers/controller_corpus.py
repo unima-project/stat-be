@@ -1,15 +1,18 @@
 import logging
+
+from apis.controllers.controller_nltk import Tokenizing
 from models.model_corpus import (
     Add_new_corpus
-    , View_all_corpus
-    , Delete_current_corpus
-    , Find_corpus_by_custom_filter
-    , Update_current_corpus
-    , Corpuses
+, View_all_corpus
+, Delete_current_corpus
+, Find_corpus_by_custom_filter
+, Update_current_corpus
+, Corpuses
 )
 
 from models.model_user import Find_user_by_id
 from models.model_common import USER_ADMIN
+from models.model_token import Add_new_tokens
 
 from apis.controllers.controller_common import Response, ERROR, SUCCESS
 from flask import request, jsonify
@@ -29,8 +32,9 @@ def Register_new_corpus(user_id):
     )
 
     try:
+        corpus = request.get_json()['corpus']
         new_corpus = {
-            "corpus": request.get_json()['corpus']
+            "corpus": corpus
             , "user_id": user_id
         }
 
@@ -38,7 +42,14 @@ def Register_new_corpus(user_id):
         if err:
             logging.error(err)
             error_response['message'] = err
-            return jsonify(error_response), 400
+            return jsonify(error_response), 500
+
+        tokens = Tokenizing(corpus)
+        err = Add_new_tokens(tokens)
+        if err:
+            logging.error(err)
+            error_response['message'] = err
+            return jsonify(error_response), 500
 
         return success_response, 200
     except KeyError as err:
@@ -66,7 +77,6 @@ def Get_all_corpus_list(user_id):
     )
 
     try:
-        corpus_list = {}
         current_user, err = Find_user_by_id(user_id)
         if err:
             logging.error(err)
@@ -137,7 +147,6 @@ def Delete_corpus(user_id):
     )
 
     try:
-        corpus_list = {}
         corpus_id = int(request.args.get('id'))
 
         current_user, err = Find_user_by_id(user_id)
