@@ -8,6 +8,7 @@ from apis import api_user
 from apis import api_corpus
 from apis import api_token
 from apis import api_about
+from apis import api_theme
 from config import Config_db
 from models.model import initDB
 
@@ -36,5 +37,6 @@ def create_app():
 
     app.register_blueprint(api_token.tokenRouter)
     app.register_blueprint(api_about.aboutRouter)
+    app.register_blueprint(api_theme.themeRouter)
 
     return app
