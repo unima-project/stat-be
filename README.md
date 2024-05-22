@@ -3,7 +3,7 @@
 ### pull code from git remote repository
 ```commandline
 > git init
-> git remote add origin https://github.com/michaelwp/simple-text-analysis-tool.git
+> git remote add origin https://github.com/unima-project/stat-be.git
 > git pull origin main
 ```
 
